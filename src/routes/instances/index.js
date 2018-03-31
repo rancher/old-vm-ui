@@ -2,18 +2,8 @@ import React, { PropTypes } from 'react'
 import { connect } from 'dva'
 import InstanceList from './InstanceList'
 
-function Instances({ instances, dispatch, loading }) {
+function Instances({ instances, loading }) {
   const { data } = instances
-  const props = {
-    data,
-    loading,
-    onSubmit(payload) {
-      dispatch({
-        type: 'instances/update',
-        payload,
-      })
-    },
-  }
 
   const instanceListProps = {
     dataSource: data,
@@ -29,7 +19,6 @@ function Instances({ instances, dispatch, loading }) {
 
 Instances.propTypes = {
   instances: PropTypes.object,
-  dispatch: PropTypes.func,
   loading: PropTypes.bool,
 }
 

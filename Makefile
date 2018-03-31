@@ -1,4 +1,4 @@
-NS = rancher
+NS = llparse
 VERSION = $(shell ./scripts/version)
 
 REPO = longhorn-ui

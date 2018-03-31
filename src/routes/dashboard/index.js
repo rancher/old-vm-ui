@@ -6,7 +6,7 @@ import { NumberCard } from './components'
 function Dashboard({ instances, loading }) {
   const instanceNum = instances.data.length
   const volumeNum = 0
-  const { instances: instanceLoading, volume: volumeLoading } = loading.models
+  const { instances: instanceLoading } = loading.models
 
   const numbers = [{
     icon: 'laptop',
@@ -21,7 +21,6 @@ function Dashboard({ instances, loading }) {
     title: 'Volumes',
     number: volumeNum,
     linkTo: '/volume',
-    // loading: volumeLoading,
   },
   ]
 

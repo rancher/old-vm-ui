@@ -45,7 +45,7 @@ function list({ loading, dataSource }) {
         loading={loading}
         simple
         pagination={pagination}
-        rowKey={record => record.metadata.namespace+record.metadata.name}
+        rowKey={record => record.metadata.name}
       />
     </div>
   )
