@@ -5,6 +5,26 @@ import styles from './InstanceList.less'
 function list({ loading, dataSource }) {
   const columns = [
     {
+      title: 'Name',
+      dataIndex: 'metadata.name',
+      key: 'name',
+    }, {
+      title: 'Instance ID',
+      dataIndex: 'metadata.uid',
+      key: 'uid',
+    }, {
+      title: 'vCPU',
+      dataIndex: 'spec.cpus',
+      key: 'cpus',
+    }, {
+      title: 'Memory',
+      dataIndex: 'spec.memory_mb',
+      key: 'memory',
+    }, {
+      title: 'Image',
+      dataIndex: 'spec.image',
+      key: 'image',
+    }, {
       title: 'State',
       dataIndex: 'state',
       key: 'state',
@@ -15,26 +35,10 @@ function list({ loading, dataSource }) {
           <div>Activate</div>
         )
       },
-    }, {
-      title: 'Name',
-      dataIndex: 'metadata.name',
-      key: 'name',
-    }, {
-      title: 'Image',
-      dataIndex: 'spec.image',
-      key: 'image',
-    }, {
-      title: 'vCPU',
-      dataIndex: 'spec.cpus',
-      key: 'cpus',
-    }, {
-      title: 'Memory',
-      dataIndex: 'spec.memory_mb',
-      key: 'memory',
     },
   ]
 
-  const pagination = false
+  const pagination = true
 
   return (
     <div>
