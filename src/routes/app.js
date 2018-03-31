@@ -26,7 +26,7 @@ const App = ({ children, dispatch, location, app }) => {
     <LocaleProvider locale={enUS}>
       <div className={blur(app.blur)}>
         <Helmet>
-          <title>Longhorn</title>
+          <title>RancherVM</title>
           <link rel="icon" href={config.logoSrc} type="image/x-icon" />
         </Helmet>
         <div className={classnames(styles.layout, { [styles.fold]: true }, { [styles.withnavbar]: true })}>

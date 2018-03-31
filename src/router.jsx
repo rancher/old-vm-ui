@@ -21,8 +21,7 @@ const Routers = function ({ history, app }) {
         nprogress.start()
         require.ensure([], (require) => {
           nprogress.done()
-          registerModel(app, require('./models/host'))
-          registerModel(app, require('./models/volume'))
+          registerModel(app, require('./models/instances'))
           cb(null, { component: require('./routes/dashboard/') })
         }, 'dashboard')
       },
@@ -34,10 +33,21 @@ const Routers = function ({ history, app }) {
             nprogress.start()
             require.ensure([], (require) => {
               nprogress.done()
-              registerModel(app, require('./models/host'))
-              registerModel(app, require('./models/volume'))
+              registerModel(app, require('./models/instances'))
               cb(null, require('./routes/dashboard/'))
             }, 'dashboard')
+          },
+        },
+        {
+          path: 'instances',
+          name: 'instances',
+          getComponent(nextState, cb) {
+            nprogress.start()
+            require.ensure([], (require) => {
+              nprogress.done()
+              registerModel(app, require('./models/instances'))
+              cb(null, require('./routes/instances/'))
+            }, 'instances')
           },
         },
         {
