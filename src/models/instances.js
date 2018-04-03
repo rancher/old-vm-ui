@@ -21,8 +21,7 @@ export default {
       payload,
     }, { call, put }) {
       const data = yield call(query, parse(payload))
-      // console.dir(data)
-      // data.data.sort((a, b) => a.name.localeCompare(b.name))
+      data.data.sort((a, b) => a.metadata.name.localeCompare(b.metadata.name))
       yield put({ type: 'queryInstance', payload: { ...data } })
     },
     // *create({
