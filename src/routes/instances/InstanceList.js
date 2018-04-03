@@ -1,8 +1,32 @@
 import React, { PropTypes } from 'react'
-import { Table } from 'antd'
-import styles from './InstanceList.less'
+import { Button, Modal, Radio, Table } from 'antd'
+const confirm = Modal.confirm
 
 function list({ loading, dataSource }) {
+  const handleActionChange = (record, event) => {
+    confirm({
+      title: `Unimplemented: ${event.target.value}`,
+    })
+    switch (event.target.value) {
+      // TODO make service calls
+      case 'start':
+      case 'stop':
+      case 'reboot':
+      default:
+    }
+  }
+
+  const handleDelete = (record) => {
+    confirm({
+      title: `Are you sure you want to delete vm ${record.metadata.namespace}/${record.metadata.name} ?`,
+      onOk() {
+        confirm({
+          title: 'Unimplemented',
+        })
+      },
+    })
+  }
+
   const columns = [
     {
       title: 'Name',
@@ -26,24 +50,37 @@ function list({ loading, dataSource }) {
       key: 'image',
     }, {
       title: 'State',
-      dataIndex: 'state',
+      dataIndex: 'status.state',
       key: 'state',
-      width: 100,
-      className: styles.status,
-      render: () => {
+    }, {
+      title: 'Launch Time',
+      dataIndex: 'metadata.creationTimestamp',
+      key: 'launchTime',
+    }, {
+      title: 'Actions',
+      key: 'action',
+      render: (record) => {
         return (
-          <div>Activate</div>
+          <div>
+            <Radio.Group value={record.spec.action} onChange={e => handleActionChange(record, e)}>
+              <Radio.Button value="stop">Stop</Radio.Button>
+              <Radio.Button value="start">Start</Radio.Button>
+              <Radio.Button value="reboot">Reboot</Radio.Button>
+            </Radio.Group>
+            <Button type="danger" value="delete" onClick={e => handleDelete(record, e)}>Delete</Button>
+          </div>
         )
       },
     },
   ]
 
+  const bordered = true
   const pagination = true
 
   return (
     <div>
       <Table
-        bordered={false}
+        bordered={bordered}
         columns={columns}
         dataSource={dataSource}
         loading={loading}
