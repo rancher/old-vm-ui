@@ -2,27 +2,22 @@ import React, { PropTypes } from 'react'
 import { Button, Modal, Radio, Table } from 'antd'
 const confirm = Modal.confirm
 
-function list({ loading, dataSource }) {
+function list({ loading, dataSource, deleteInstance, actionInstance }) {
   const handleActionChange = (record, event) => {
-    confirm({
-      title: `Unimplemented: ${event.target.value}`,
-    })
-    switch (event.target.value) {
-      // TODO make service calls
-      case 'start':
-      case 'stop':
-      case 'reboot':
-      default:
-    }
+    actionInstance(record, event.target.value)
+    // confirm({
+    //   title: `Are you sure you want to ${event.target.value} vm ${record.metadata.namespace}/${record.metadata.name} ?`,
+    //   onOk() {
+    //     actionInstance(record, event.target.value)
+    //   },
+    // })
   }
 
   const handleDelete = (record) => {
     confirm({
       title: `Are you sure you want to delete vm ${record.metadata.namespace}/${record.metadata.name} ?`,
       onOk() {
-        confirm({
-          title: 'Unimplemented',
-        })
+        deleteInstance(record)
       },
     })
   }
@@ -65,10 +60,19 @@ function list({ loading, dataSource }) {
             <Radio.Group value={record.spec.action} onChange={e => handleActionChange(record, e)}>
               <Radio.Button value="stop">Stop</Radio.Button>
               <Radio.Button value="start">Start</Radio.Button>
-              <Radio.Button value="reboot">Reboot</Radio.Button>
+              <Radio.Button value="reboot" disabled>Reboot</Radio.Button>
             </Radio.Group>
             <Button type="danger" value="delete" onClick={e => handleDelete(record, e)}>Delete</Button>
           </div>
+        )
+      },
+    },
+    {
+      title: 'VNC',
+      key: 'vnc',
+      render: () => {
+        return (
+          <Button type="primary" icon="eye-o" disabled></Button>
         )
       },
     },
@@ -85,6 +89,7 @@ function list({ loading, dataSource }) {
         dataSource={dataSource}
         loading={loading}
         simple
+        size="middle"
         pagination={pagination}
         rowKey={record => record.metadata.name}
       />
@@ -95,6 +100,8 @@ function list({ loading, dataSource }) {
 list.propTypes = {
   loading: PropTypes.bool,
   dataSource: PropTypes.array,
+  deleteInstance: PropTypes.func,
+  actionInstance: PropTypes.func,
 }
 
 export default list
