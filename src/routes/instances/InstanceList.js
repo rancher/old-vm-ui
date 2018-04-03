@@ -22,6 +22,11 @@ function list({ loading, dataSource, deleteInstance, actionInstance }) {
     })
   }
 
+  const handleVnc = (record) => {
+    let url = `${record.status.vnc_endpoint}?autoconnect=true`
+    window.open(url)
+  }
+
   const columns = [
     {
       title: 'Namespace',
@@ -81,7 +86,7 @@ function list({ loading, dataSource, deleteInstance, actionInstance }) {
           )
         }
         return (
-          <Button type="primary" icon="eye-o"></Button>
+          <Button type="primary" icon="eye-o" onClick={e => handleVnc(record, e)}></Button>
         )
       },
     },
