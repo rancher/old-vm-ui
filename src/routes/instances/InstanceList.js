@@ -24,6 +24,10 @@ function list({ loading, dataSource, deleteInstance, actionInstance }) {
 
   const columns = [
     {
+      title: 'Namespace',
+      dataIndex: 'metadata.namespace',
+      key: 'namespace',
+    }, {
       title: 'Name',
       dataIndex: 'metadata.name',
       key: 'name',
@@ -70,9 +74,14 @@ function list({ loading, dataSource, deleteInstance, actionInstance }) {
     {
       title: 'VNC',
       key: 'vnc',
-      render: () => {
+      render: (record) => {
+        if (record.status.state !== 'running') {
+          return (
+            <Button type="primary" icon="eye-o" disabled></Button>
+          )
+        }
         return (
-          <Button type="primary" icon="eye-o" disabled></Button>
+          <Button type="primary" icon="eye-o"></Button>
         )
       },
     },
