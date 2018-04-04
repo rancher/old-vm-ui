@@ -6,6 +6,15 @@ import InstanceList from './InstanceList'
 function Instances({ instances, loading, dispatch }) {
   const { data } = instances
 
+  const instanceCreateProps = {
+    createInstance(record) {
+      dispatch({
+        type: 'instances/create',
+        payload: record,
+      })
+    },
+  }
+
   const instanceListProps = {
     dataSource: data,
     loading,
@@ -28,7 +37,7 @@ function Instances({ instances, loading, dispatch }) {
 
   return (
     <div className="content-inner">
-      <InstanceCreate />
+      <InstanceCreate {...instanceCreateProps} />
       <InstanceList {...instanceListProps} />
     </div>
   )

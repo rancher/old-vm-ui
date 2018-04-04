@@ -1,4 +1,4 @@
-import { query, deleteInstance, actionInstance } from '../services/instances'
+import { query, deleteInstance, actionInstance, createInstance } from '../services/instances'
 import { parse } from 'qs'
 
 export default {
@@ -24,13 +24,12 @@ export default {
       data.data.sort((a, b) => a.metadata.name.localeCompare(b.metadata.name))
       yield put({ type: 'queryInstance', payload: { ...data } })
     },
-    // *create({
-    //   payload,
-    // }, { call, put }) {
-    //   yield put({ type: 'hideCreateInstanceModal' })
-    //   yield call(create, payload)
-    //   yield put({ type: 'query' })
-    // },
+    *create({
+      payload,
+    }, { call, put }) {
+      yield call(createInstance, payload)
+      yield put({ type: 'query' })
+    },
     *action({
       payload,
       action,
@@ -52,11 +51,5 @@ export default {
         ...action.payload,
       }
     },
-    // showCreateInstanceModal(state, action) {
-    //   return { ...state, ...action.payload, createInstanceModalVisible: true }
-    // },
-    // hideCreateInstanceModal(state) {
-    //   return { ...state, createInstanceModalVisible: false }
-    // },
   },
 }

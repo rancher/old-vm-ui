@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
 import { Button, Modal, Slider, InputNumber, Row, Col, Radio, Checkbox, Input } from 'antd'
 
 const memoryMarks = {
@@ -12,7 +12,6 @@ const memoryMarks = {
 
 class InstanceCreate extends React.Component {
   state = {
-    ModalText: 'Content of the modal',
     visible: false,
     confirmLoading: false,
     namespace: 'default',
@@ -38,7 +37,8 @@ class InstanceCreate extends React.Component {
       memory: value,
     })
   }
-  onImageChange = (value) => {
+  onImageChange = (e) => {
+    const { value } = e.target
     this.setState({
       image: value,
     })
@@ -54,16 +54,33 @@ class InstanceCreate extends React.Component {
     })
   }
   handleOk = () => {
-    this.setState({
-      ModalText: 'The modal will be closed after two seconds',
-      confirmLoading: true,
-    })
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       this.setState({
         visible: false,
         confirmLoading: false,
       })
-    }, 1000)
+    }, 3000)
+    this.setState({
+      confirmLoading: true,
+    })
+    if (this.state.start === true) {
+      this.state.action = 'start'
+    } else {
+      this.state.action = 'stop'
+    }
+    this.props.createInstance({
+      namespace: this.state.namespace,
+      name: this.state.name,
+      cpus: this.state.cpus,
+      memory: this.state.memory,
+      image: this.state.image,
+      action: this.state.action,
+    })
+    clearTimeout(timeout)
+    this.setState({
+      visible: false,
+      confirmLoading: false,
+    })
   }
   handleCancel = () => {
     this.setState({
@@ -71,7 +88,7 @@ class InstanceCreate extends React.Component {
     })
   }
   render() {
-    const { visible, confirmLoading } = this.state
+    const { visible, confirmLoading, cpus, memory, image, start } = this.state
     return (
       <div>
         <Button type="primary" onClick={this.showModal} style={{ marginBottom: 5 }}>Create Instance</Button>
@@ -93,14 +110,14 @@ class InstanceCreate extends React.Component {
           </Row>
           <Row>
             <Col span={12}>
-              <Slider min={1} max={32} onChange={this.onCpusChange} value={this.state.cpus} />
+              <Slider min={1} max={32} onChange={this.onCpusChange} value={cpus} />
             </Col>
             <Col span={4}>
               <InputNumber
                 min={1}
                 max={32}
                 style={{ marginLeft: 16 }}
-                value={this.state.cpus}
+                value={cpus}
                 onChange={this.onCpusChange}
               />
             </Col>
@@ -110,14 +127,14 @@ class InstanceCreate extends React.Component {
           </Row>
           <Row>
             <Col span={12}>
-              <Slider min={256} max={8192} marks={memoryMarks} step={null} onChange={this.onMemoryChange} value={this.state.memory} />
+              <Slider min={256} max={8192} marks={memoryMarks} step={null} onChange={this.onMemoryChange} value={memory} />
             </Col>
             <Col span={4}>
               <InputNumber
                 min={256}
                 max={8192}
                 style={{ marginLeft: 16 }}
-                value={this.state.memory}
+                value={memory}
                 onChange={this.onMemoryChange}
               />
             </Col>
@@ -127,7 +144,7 @@ class InstanceCreate extends React.Component {
           </Row>
           <Row>
             <Col span={17}>
-              <Radio.Group value={this.state.image} onChange={this.onImageChange} type="primary">
+              <Radio.Group value={image} onChange={this.onImageChange} type="primary">
                 <Radio.Button value="ubuntu">Ubuntu</Radio.Button>
                 <Radio.Button value="centos">CentOS</Radio.Button>
                 <Radio.Button value="rancheros">RancherOS</Radio.Button>
@@ -139,12 +156,16 @@ class InstanceCreate extends React.Component {
             </Col>
           </Row>
           <Row>
-            <Checkbox defaultChecked={this.state.start} onChange={this.onActionChange} style={{ marginTop: 16 }}>Start Instance Immediately</Checkbox>
+            <Checkbox defaultChecked={start} onChange={this.onActionChange} style={{ marginTop: 16 }}>Start Instance Immediately</Checkbox>
           </Row>
         </Modal>
       </div>
     )
   }
+}
+
+InstanceCreate.propTypes = {
+  createInstance: PropTypes.func,
 }
 
 export default InstanceCreate

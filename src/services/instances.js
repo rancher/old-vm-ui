@@ -8,15 +8,12 @@ export async function query(params) {
   })
 }
 
-export async function create(params) {
+export async function createInstance(params) {
   return request({
     url: '/v1/instances',
     method: 'post',
     data: {
       ...params,
-      staleReplicaTimeout: 20,
-      size: `${params.size}Gi`,
-      fromBackup: '',
     },
   })
 }
