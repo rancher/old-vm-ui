@@ -56,14 +56,15 @@ function list({ loading, dataSource, deleteInstance, actionInstance }) {
       key: 'image',
       width: 100,
     }, {
+      title: 'Launch Time',
+      dataIndex: 'metadata.creationTimestamp',
+      key: 'launchTime',
+    }, {
       title: 'State',
       dataIndex: 'status.state',
       key: 'state',
       width: 100,
-    }, {
-      title: 'Launch Time',
-      dataIndex: 'metadata.creationTimestamp',
-      key: 'launchTime',
+      fixed: 'right',
     }, {
       title: 'Actions',
       key: 'action',
