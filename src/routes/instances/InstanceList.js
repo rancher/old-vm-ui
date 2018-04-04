@@ -54,7 +54,7 @@ function list({ loading, dataSource, deleteInstance, actionInstance }) {
       title: 'Image',
       dataIndex: 'spec.image',
       key: 'image',
-      width: 100,
+      width: 200,
     }, {
       title: 'Launch Time',
       dataIndex: 'metadata.creationTimestamp',

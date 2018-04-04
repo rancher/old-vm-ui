@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react'
-import { Button, Modal, Slider, InputNumber, Row, Col, Radio, Checkbox, Input } from 'antd'
+import { Button, Modal, Slider, InputNumber, Row, Col, Checkbox, Input, Menu, Dropdown } from 'antd'
+const SubMenu = Menu.SubMenu
 
 const memoryMarks = {
   256: '',
@@ -18,7 +19,7 @@ class InstanceCreate extends React.Component {
     name: '',
     cpus: 1,
     memory: 512,
-    image: 'ubuntu',
+    image: 'ubuntu:16.04.4-desktop-amd64',
     start: true,
   }
   onNameChange = (e) => {
@@ -37,10 +38,10 @@ class InstanceCreate extends React.Component {
       memory: value,
     })
   }
-  onImageChange = (e) => {
-    const { value } = e.target
+  onImageSelected = (e) => {
+    const { key } = e
     this.setState({
-      image: value,
+      image: key,
     })
   }
   onActionChange = (value) => {
@@ -89,6 +90,17 @@ class InstanceCreate extends React.Component {
   }
   render() {
     const { visible, confirmLoading, cpus, memory, image, start } = this.state
+    const menu = (
+      <Menu onSelect={this.onImageSelected}>
+        <SubMenu title="Ubuntu">
+          <Menu.Item key="ubuntu:16.04.4-desktop-amd64">16.04 LTS Desktop</Menu.Item>
+          <Menu.Item key="ubuntu:16.04.4-server-amd64">16.04 LTS Server</Menu.Item>
+        </SubMenu>
+        <Menu.Item key="centos">CentOS</Menu.Item>
+        <Menu.Item key="rancheros">RancherOS</Menu.Item>
+        <Menu.Item key="windows7">Windows 7</Menu.Item>
+      </Menu>
+    )
     return (
       <div>
         <Button type="primary" onClick={this.showModal} style={{ marginBottom: 5 }}>Create Instance</Button>
@@ -100,15 +112,17 @@ class InstanceCreate extends React.Component {
           onCancel={this.handleCancel}
         >
           <Row>
-            <Col span={12}>
-              <Input placeholder="Name" onChange={this.onNameChange} style={{ marginBottom: 5 }} />
-            </Col>
-            <Col span={4}></Col>
             <Col span={4} style={{ marginLeft: 24, marginTop: 5 }}>
               <p>Name</p>
             </Col>
+            <Col span={16}>
+              <Input placeholder="Name" onChange={this.onNameChange} style={{ marginBottom: 5 }} />
+            </Col>
           </Row>
           <Row>
+            <Col span={4} style={{ marginLeft: 24, marginTop: 5 }}>
+              <p>vCPUs</p>
+            </Col>
             <Col span={12}>
               <Slider min={1} max={32} onChange={this.onCpusChange} value={cpus} />
             </Col>
@@ -121,11 +135,11 @@ class InstanceCreate extends React.Component {
                 onChange={this.onCpusChange}
               />
             </Col>
-            <Col span={4} style={{ marginLeft: 24, marginTop: 5 }}>
-              <p>vCPUs</p>
-            </Col>
           </Row>
           <Row>
+            <Col span={4} style={{ marginLeft: 24, marginTop: 5 }}>
+              <p>MiB Memory</p>
+            </Col>
             <Col span={12}>
               <Slider min={256} max={8192} marks={memoryMarks} step={null} onChange={this.onMemoryChange} value={memory} />
             </Col>
@@ -138,21 +152,15 @@ class InstanceCreate extends React.Component {
                 onChange={this.onMemoryChange}
               />
             </Col>
-            <Col span={4} style={{ marginLeft: 24, marginTop: 5 }}>
-              <p>MiB Memory</p>
-            </Col>
           </Row>
           <Row>
-            <Col span={17}>
-              <Radio.Group value={image} onChange={this.onImageChange} type="primary">
-                <Radio.Button value="ubuntu">Ubuntu</Radio.Button>
-                <Radio.Button value="centos">CentOS</Radio.Button>
-                <Radio.Button value="rancheros">RancherOS</Radio.Button>
-                <Radio.Button value="windows7">Windows 7</Radio.Button>
-              </Radio.Group>
-            </Col>
-            <Col span={4} style={{ marginLeft: 5, marginTop: 5 }}>
+            <Col span={4} style={{ marginLeft: 24, marginTop: 5 }}>
               <p>Base Image</p>
+            </Col>
+            <Col span={17}>
+              <Dropdown.Button overlay={menu}>
+                {image}
+              </Dropdown.Button>
             </Col>
           </Row>
           <Row>
