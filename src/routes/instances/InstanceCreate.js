@@ -96,7 +96,10 @@ class InstanceCreate extends React.Component {
           <Menu.Item key="ubuntu:16.04.4-desktop-amd64">16.04 LTS Desktop</Menu.Item>
           <Menu.Item key="ubuntu:16.04.4-server-amd64">16.04 LTS Server</Menu.Item>
         </SubMenu>
-        <Menu.Item key="centos">CentOS</Menu.Item>
+        <SubMenu title="CentOS">
+          <Menu.Item key="centos:7-x86_64-minimal-1708">7 Minimal (Build 1708)</Menu.Item>
+          <Menu.Item key="centos:6.9-x86_64-minimal">6.9 Minimal</Menu.Item>
+        </SubMenu>
         <Menu.Item key="rancheros">RancherOS</Menu.Item>
         <Menu.Item key="windows7">Windows 7</Menu.Item>
       </Menu>
