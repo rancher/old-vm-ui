@@ -17,7 +17,7 @@ function list({ loading, dataSource, deleteInstance, actionInstance }) {
   }
 
   const handleVnc = (record) => {
-    let url = `${record.status.vnc_endpoint}?autoconnect=true`
+    let url = `http://${record.status.vnc_endpoint}?autoconnect=true`
     window.open(url)
   }
 
