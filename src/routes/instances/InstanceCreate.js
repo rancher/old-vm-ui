@@ -101,7 +101,10 @@ class InstanceCreate extends React.Component {
           <Menu.Item key="centos:6.9-x86_64-minimal">6.9 Minimal</Menu.Item>
         </SubMenu>
         <Menu.Item key="rancheros">RancherOS</Menu.Item>
-        <Menu.Item key="windows7">Windows 7</Menu.Item>
+        <SubMenu title="Windows">
+          <Menu.Item key="windows7">7 Starter N</Menu.Item>
+          <Menu.Item key="windows:TinyXP-Rev09">TinyXP Rev09</Menu.Item>
+        </SubMenu>
       </Menu>
     )
     return (
