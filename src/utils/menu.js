@@ -9,6 +9,11 @@ module.exports = [
     name: 'Instances',
     icon: 'laptop',
   },
+  {
+    key: 'hosts',
+    name: 'Hosts',
+    icon: 'eye',
+  },
   // {
   //   key: 'host',
   //   name: 'Host',

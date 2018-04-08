@@ -44,9 +44,9 @@ class InstanceCreate extends React.Component {
       image: key,
     })
   }
-  onActionChange = (value) => {
+  onActionChange = (e) => {
     this.setState({
-      start: value,
+      start: e.target.checked,
     })
   }
   showModal = () => {
@@ -89,9 +89,12 @@ class InstanceCreate extends React.Component {
     })
   }
   render() {
-    const { visible, confirmLoading, cpus, memory, image, start } = this.state
+    const { visible, confirmLoading, cpus, memory, image } = this.state
+    // TODO: Image data should come from backend. Consider supporting volumes
+    // from base images and VM images in the near future
     const menu = (
       <Menu onSelect={this.onImageSelected}>
+        <Menu.Item key="rancheros">RancherOS</Menu.Item>
         <SubMenu title="Ubuntu">
           <Menu.Item key="ubuntu:16.04.4-desktop-amd64">16.04 LTS Desktop</Menu.Item>
           <Menu.Item key="ubuntu:16.04.4-server-amd64">16.04 LTS Server</Menu.Item>
@@ -100,7 +103,6 @@ class InstanceCreate extends React.Component {
           <Menu.Item key="centos:7-x86_64-minimal-1708">7 Minimal (Build 1708)</Menu.Item>
           <Menu.Item key="centos:6.9-x86_64-minimal">6.9 Minimal</Menu.Item>
         </SubMenu>
-        <Menu.Item key="rancheros">RancherOS</Menu.Item>
         <SubMenu title="Windows">
           <Menu.Item key="windows7">7 Starter N</Menu.Item>
           <Menu.Item key="windows:TinyXP-Rev09">TinyXP Rev09</Menu.Item>
@@ -170,7 +172,7 @@ class InstanceCreate extends React.Component {
             </Col>
           </Row>
           <Row>
-            <Checkbox defaultChecked={start} onChange={this.onActionChange} style={{ marginTop: 16 }}>Start Instance Immediately</Checkbox>
+            <Checkbox defaultChecked onChange={this.onActionChange} style={{ marginTop: 16 }}>Start Instance Immediately</Checkbox>
           </Row>
         </Modal>
       </div>

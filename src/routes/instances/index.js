@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'dva'
 import InstanceCreate from './InstanceCreate'
-import InstanceList from './InstanceList'
+import InstanceLister from './InstanceLister'
 
 function Instances({ instances, loading, dispatch }) {
   const { data } = instances
@@ -36,9 +36,9 @@ function Instances({ instances, loading, dispatch }) {
   }
 
   return (
-    <div className="content-inner">
+    <div>
       <InstanceCreate {...instanceCreateProps} />
-      <InstanceList {...instanceListProps} />
+      <InstanceLister {...instanceListProps} />
     </div>
   )
 }

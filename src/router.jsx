@@ -51,6 +51,18 @@ const Routers = function ({ history, app }) {
           },
         },
         {
+          path: 'hosts',
+          name: 'hosts',
+          getComponent(nextState, cb) {
+            nprogress.start()
+            require.ensure([], (require) => {
+              nprogress.done()
+              registerModel(app, require('./models/hosts'))
+              cb(null, require('./routes/hosts/'))
+            }, 'hosts')
+          },
+        },
+        {
           path: 'host',
           name: 'host',
           getComponent(nextState, cb) {
