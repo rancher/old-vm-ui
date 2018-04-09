@@ -66,12 +66,12 @@ class InstanceLister extends React.Component {
         title: 'Image',
         dataIndex: 'spec.image',
         key: 'image',
-        width: 200,
+        // width: 200,
       }, {
         title: 'Launch Time',
         dataIndex: 'metadata.creationTimestamp',
         key: 'launchTime',
-        // width: 200,
+        width: 150,
       }, {
         title: 'State',
         dataIndex: 'status.state',

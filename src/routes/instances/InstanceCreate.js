@@ -19,7 +19,7 @@ class InstanceCreate extends React.Component {
     name: '',
     cpus: 1,
     memory: 512,
-    image: 'ubuntu:16.04.4-desktop-amd64',
+    image: 'ubuntu:16.04.4-server-amd64',
     start: true,
   }
   onNameChange = (e) => {

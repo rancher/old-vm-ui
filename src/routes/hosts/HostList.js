@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react'
 import { Table } from 'antd'
+import styles from './HostList.less'
 
 class Hosts extends React.Component {
   state = {}
@@ -19,12 +20,7 @@ class Hosts extends React.Component {
         title: 'Internal IP',
         dataIndex: 'status.addresses[0].address',
         key: 'internalIP',
-        width: 120,
-      },
-      {
-        title: 'Hostname',
-        dataIndex: 'status.addresses[1].address',
-        key: 'hostname',
+        width: 110,
       },
       {
         title: 'CPUs',
@@ -36,7 +32,7 @@ class Hosts extends React.Component {
         title: 'Memory',
         dataIndex: 'status.allocatable.memory',
         key: 'memAllocable',
-        width: 120,
+        width: 90,
       },
       {
         title: 'Pods',
@@ -45,29 +41,90 @@ class Hosts extends React.Component {
         width: 60,
       },
       {
+        title: 'Hostname',
+        dataIndex: 'status.addresses[1].address',
+        key: 'hostname',
+      },
+      {
         title: 'Out Of Disk',
         dataIndex: 'status.conditions[0].status',
         key: 'outOfDisk',
+        fixed: 'right',
         width: 90,
+        render: (value) => {
+          let targetClass = styles['status-bad']
+          if (value === 'False') {
+            targetClass = styles['status-good']
+          }
+          const obj = {
+            children: value,
+            props: {
+              className: targetClass,
+            },
+          }
+          return obj
+        },
       },
       {
         title: 'Memory Pressure',
         dataIndex: 'status.conditions[1].status',
         key: 'memoryPressure',
+        fixed: 'right',
         width: 120,
+        render: (value) => {
+          let targetClass = styles['status-bad']
+          if (value === 'False') {
+            targetClass = styles['status-good']
+          }
+          const obj = {
+            children: value,
+            props: {
+              className: targetClass,
+            },
+          }
+          return obj
+        },
       },
       {
         title: 'Disk Pressure',
         dataIndex: 'status.conditions[2].status',
         key: 'diskPressure',
+        fixed: 'right',
         width: 100,
+        render: (value) => {
+          let targetClass = styles['status-bad']
+          if (value === 'False') {
+            targetClass = styles['status-good']
+          }
+          const obj = {
+            children: value,
+            props: {
+              className: targetClass,
+            },
+          }
+          return obj
+        },
       },
       {
         title: 'Ready',
         dataIndex: 'status.conditions[3].status',
         key: 'ready',
         fixed: 'right',
-        width: 80,
+        width: 60,
+        className: styles['status-bad'],
+        render: (value) => {
+          let targetClass = styles['status-bad']
+          if (value === 'True') {
+            targetClass = styles['status-good']
+          }
+          const obj = {
+            children: value,
+            props: {
+              className: targetClass,
+            },
+          }
+          return obj
+        },
       },
     ]
 
@@ -79,7 +136,7 @@ class Hosts extends React.Component {
           columns={columns}
           dataSource={dataSource}
           loading={loading}
-          size="middle"
+          size="small"
           pagination={{ pageSize: 10 }}
           scroll={{ x: 1200, y: 500 }}
           rowKey={record => record.metadata.name}
@@ -91,7 +148,7 @@ class Hosts extends React.Component {
 
 Hosts.propTypes = {
   dataSource: PropTypes.array,
-  loading: PropTypes.func,
+  loading: PropTypes.bool,
 }
 
 export default Hosts

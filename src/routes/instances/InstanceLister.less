@@ -1,7 +1,17 @@
 .state { color: #27ae60; }
-.ant-table td { white-space: nowrap; }
+.ant-table-small td { white-space: nowrap; text-overflow: ellipsis; }
 
 .status-pending  { background-color: #ffffcc; }
 .status-running  { background-color: #ccffcc; }
 .status-stopping { background-color: #ffffcc; }
 .status-stopped  { background-color: #ffcccc; }
+
+thead[class*="ant-table-thead"] th{
+  background-color: #2095c8 !important;
+}
+
+table[class*="ant-table"] {
+  white-space: nowrap;
+}
+
+//  background-color: #0075a8 !important;

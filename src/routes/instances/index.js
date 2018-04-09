@@ -16,8 +16,8 @@ function Instances({ instances, loading, dispatch }) {
   }
 
   const instanceListProps = {
-    dataSource: data,
     loading,
+    dataSource: data,
     deleteInstance(record) {
       dispatch({
         type: 'instances/delete',
