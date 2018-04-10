@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react'
-import { Button, Modal, Slider, InputNumber, Row, Col, Checkbox, Input, Menu, Dropdown } from 'antd'
+import { Button, Modal, Slider, InputNumber, Row, Col, Checkbox, Input, Menu, Dropdown, Select } from 'antd'
 const SubMenu = Menu.SubMenu
+const Option = Select.Option
 
 const memoryMarks = {
   256: '',
@@ -21,6 +22,7 @@ class InstanceCreate extends React.Component {
     memory: 512,
     image: 'ubuntu:16.04.4-server-amd64',
     start: true,
+    publicKeys: [],
   }
   onNameChange = (e) => {
     const { value } = e.target
@@ -47,6 +49,11 @@ class InstanceCreate extends React.Component {
   onActionChange = (e) => {
     this.setState({
       start: e.target.checked,
+    })
+  }
+  onPublicKeyChange = (values) => {
+    this.setState({
+      publicKeys: values,
     })
   }
   showModal = () => {
@@ -76,6 +83,7 @@ class InstanceCreate extends React.Component {
       memory: this.state.memory,
       image: this.state.image,
       action: this.state.action,
+      public_keys: this.state.publicKeys,
     })
     clearTimeout(timeout)
     this.setState({
@@ -109,6 +117,12 @@ class InstanceCreate extends React.Component {
         </SubMenu>
       </Menu>
     )
+    // TODO: Credential data should come from backend
+    const credentials = [
+      <Option key="james">james</Option>,
+      <Option key="jimmy">jimmy</Option>,
+      <Option key="fake">fake</Option>,
+    ]
     return (
       <div>
         <Button type="primary" onClick={this.showModal} style={{ marginBottom: 5 }}>Create Instance</Button>
@@ -169,6 +183,21 @@ class InstanceCreate extends React.Component {
               <Dropdown.Button overlay={menu}>
                 {image}
               </Dropdown.Button>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={4} style={{ marginLeft: 24, marginTop: 10 }}>
+              <p>Public Keys</p>
+            </Col>
+            <Col span={16}>
+              <Select
+                mode="multiple"
+                style={{ width: '100%', marginTop: 5 }}
+                placeholder="Please select"
+                onChange={this.onPublicKeyChange}
+              >
+                {credentials}
+              </Select>
             </Col>
           </Row>
           <Row>
