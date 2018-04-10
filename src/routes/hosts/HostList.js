@@ -17,9 +17,9 @@ class Hosts extends React.Component {
         fixed: 'left',
       },
       {
-        title: 'Internal IP',
+        title: 'Private IP',
         dataIndex: 'status.addresses[0].address',
-        key: 'internalIP',
+        key: 'privateIP',
         width: 110,
       },
       {

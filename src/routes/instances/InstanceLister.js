@@ -63,7 +63,7 @@ class InstanceLister extends React.Component {
         key: 'memory',
         width: 80,
       }, {
-        title: 'Image',
+        title: 'Base Image',
         dataIndex: 'spec.image',
         key: 'image',
         // width: 200,

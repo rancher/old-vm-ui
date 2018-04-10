@@ -14,6 +14,11 @@ module.exports = [
     name: 'Hosts',
     icon: 'eye',
   },
+  {
+    key: 'credentials',
+    name: 'Credentials',
+    icon: 'key',
+  },
   // {
   //   key: 'host',
   //   name: 'Host',
