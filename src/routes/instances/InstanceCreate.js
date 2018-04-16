@@ -101,10 +101,7 @@ class InstanceCreate extends React.Component {
     // TODO: Image data should come from backend. Consider supporting volumes
     // from base images and VM images in the near future
     const menu = (
-      <Menu onSelect={this.onImageSelected}>
-        <SubMenu title="RancherOS">
-          <Menu.Item key="rancheros:1.3.0-amd64">1.3.0</Menu.Item>
-        </SubMenu>
+      <Menu onSelect={this.onImageSelected} style={{ width: '100px' }}>
         <SubMenu title="Ubuntu">
           <Menu.Item key="ubuntu:16.04.4-desktop-amd64">16.04 LTS Desktop</Menu.Item>
           <Menu.Item key="ubuntu:16.04.4-server-amd64">16.04 LTS Server</Menu.Item>
