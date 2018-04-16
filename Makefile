@@ -1,8 +1,8 @@
 NS = llparse
 VERSION = $(shell ./scripts/version)
 
-REPO = longhorn-ui
-NAME = longhorn-ui
+REPO = ranchervm-ui
+NAME = ranchervm-ui
 INSTANCE = default
 LONHORN_MANAGER_IP = http://localhost:9500
 PORT = 8000
