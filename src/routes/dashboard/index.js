@@ -3,10 +3,11 @@ import { connect } from 'dva'
 import { Row, Col } from 'antd'
 import { NumberCard } from './components'
 
-function Dashboard({ instances, loading }) {
+function Dashboard({ instances, hosts, credentials, loading }) {
   const instanceNum = instances.data.length
-  const volumeNum = 0
-  const { instances: instanceLoading } = loading.models
+  const hostNum = hosts.data.length
+  const credentialNum = credentials.data.length
+  const { instances: instanceLoading, hosts: hostLoading, credentials: credentialLoading } = loading.models
 
   const numbers = [{
     icon: 'laptop',
@@ -18,9 +19,17 @@ function Dashboard({ instances, loading }) {
   }, {
     icon: 'database',
     color: '#d897eb',
-    title: 'Volumes',
-    number: volumeNum,
-    linkTo: '/volume',
+    title: 'Hosts',
+    number: hostNum,
+    linkTo: '/hosts',
+    loading: hostLoading,
+  }, {
+    icon: 'key',
+    color: '#d897eb',
+    title: 'Credentials',
+    number: credentialNum,
+    linkTo: '/credentials',
+    loading: credentialLoading,
   },
   ]
 
@@ -39,8 +48,9 @@ function Dashboard({ instances, loading }) {
 
 Dashboard.propTypes = {
   instances: PropTypes.object,
-  volume: PropTypes.object,
+  hosts: PropTypes.object,
+  credentials: PropTypes.object,
   loading: PropTypes.object,
 }
 
-export default connect(({ instances, loading }) => ({ instances, loading }))(Dashboard)
+export default connect(({ instances, hosts, credentials, loading }) => ({ instances, hosts, credentials, loading }))(Dashboard)

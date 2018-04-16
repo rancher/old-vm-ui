@@ -12,7 +12,7 @@ module.exports = [
   {
     key: 'hosts',
     name: 'Hosts',
-    icon: 'eye',
+    icon: 'database',
   },
   {
     key: 'credentials',
