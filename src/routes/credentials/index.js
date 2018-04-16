@@ -4,7 +4,6 @@ import KeyList from './KeyList'
 
 function Credentials({ credentials, loading, dispatch }) {
   const { data } = credentials
-
   const keyListProps = {
     loading,
     dataSource: data,
@@ -14,12 +13,12 @@ function Credentials({ credentials, loading, dispatch }) {
         payload: name,
       })
     },
-    // deleteInstance(record) {
-    //   dispatch({
-    //     type: 'instances/delete',
-    //     payload: record,
-    //   })
-    // },
+    createCredential(payload) {
+      dispatch({
+        type: 'credentials/create',
+        payload,
+      })
+    },
   }
 
   return (

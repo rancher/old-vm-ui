@@ -83,7 +83,7 @@ class InstanceCreate extends React.Component {
       memory: this.state.memory,
       image: this.state.image,
       action: this.state.action,
-      public_keys: this.state.publicKeys,
+      pubkey: this.state.publicKeys,
     })
     clearTimeout(timeout)
     this.setState({
@@ -102,27 +102,30 @@ class InstanceCreate extends React.Component {
     // from base images and VM images in the near future
     const menu = (
       <Menu onSelect={this.onImageSelected}>
-        <Menu.Item key="rancheros">RancherOS</Menu.Item>
+        <SubMenu title="RancherOS">
+          <Menu.Item key="rancheros:1.3.0-amd64">1.3.0</Menu.Item>
+        </SubMenu>
         <SubMenu title="Ubuntu">
           <Menu.Item key="ubuntu:16.04.4-desktop-amd64">16.04 LTS Desktop</Menu.Item>
           <Menu.Item key="ubuntu:16.04.4-server-amd64">16.04 LTS Server</Menu.Item>
         </SubMenu>
         <SubMenu title="CentOS">
           <Menu.Item key="centos:7-x86_64-minimal-1708">7 Minimal (Build 1708)</Menu.Item>
-          <Menu.Item key="centos:6.9-x86_64-minimal">6.9 Minimal</Menu.Item>
         </SubMenu>
-        <SubMenu title="Windows">
-          <Menu.Item key="windows7">7 Starter N</Menu.Item>
-          <Menu.Item key="windows:TinyXP-Rev09">TinyXP Rev09</Menu.Item>
+        <SubMenu title="Fedora">
+          <Menu.Item key="fedora:Atomic-27-20180326.1.x86_64">27 Atomic</Menu.Item>
+          <Menu.Item key="fedora:27-1.6.x86_64">27 Server</Menu.Item>
         </SubMenu>
       </Menu>
     )
-    // TODO: Credential data should come from backend
-    const credentials = [
-      <Option key="james">james</Option>,
-      <Option key="jimmy">jimmy</Option>,
-      <Option key="fake">fake</Option>,
-    ]
+
+    const credentials = []
+    const { credentialData } = this.props
+    for (let i = 0; i < credentialData.length; i++) {
+      const { name } = credentialData[i].metadata
+      credentials.push(<Option key={name}>{name}</Option>)
+    }
+
     return (
       <div>
         <Button type="primary" onClick={this.showModal} style={{ marginBottom: 5 }}>Create Instance</Button>
@@ -210,6 +213,7 @@ class InstanceCreate extends React.Component {
 }
 
 InstanceCreate.propTypes = {
+  credentialData: PropTypes.array,
   createInstance: PropTypes.func,
 }
 

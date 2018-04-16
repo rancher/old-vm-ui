@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react'
-import { Button, Modal, Table } from 'antd'
+import { Button, Modal, Table, Row, Col, Input } from 'antd'
 const confirm = Modal.confirm
 
 const columns = [
@@ -27,16 +27,33 @@ class KeyList extends React.Component {
     selectedRowKeys: [],
     noRowSelected: true,
     deleteInProgress: false,
+
+    visible: false,
+    confirmLoading: false,
+    name: '',
+    publicKey: '',
   }
   onSelectChange = (selectedRowKeys) => {
     this.setState({ selectedRowKeys, noRowSelected: selectedRowKeys.length === 0 })
+  }
+  onClickCreate = () => {
+
   }
   onClickDelete = () => {
     const { selectedRowKeys } = this.state
     this.handleDeletes(selectedRowKeys)
   }
-  sleep = (time) => {
-    return new Promise((resolve) => setTimeout(resolve, time))
+  onNameChange = (e) => {
+    const { value } = e.target
+    this.setState({
+      name: value,
+    })
+  }
+  onPublicKeyChange = (e) => {
+    const { value } = e.target
+    this.setState({
+      publicKey: value,
+    })
   }
   handleDeletes = (names) => {
     const x = this
@@ -54,6 +71,39 @@ class KeyList extends React.Component {
       },
     })
   }
+  sleep = (time) => {
+    return new Promise((resolve) => setTimeout(resolve, time))
+  }
+  showModal = () => {
+    this.setState({
+      visible: true,
+    })
+  }
+  handleOk = () => {
+    const timeout = setTimeout(() => {
+      this.setState({
+        visible: false,
+        confirmLoading: false,
+      })
+    }, 3000)
+    this.setState({
+      confirmLoading: true,
+    })
+    this.props.createCredential({
+      name: this.state.name,
+      pubkey: this.state.publicKey,
+    })
+    clearTimeout(timeout)
+    this.setState({
+      visible: false,
+      confirmLoading: false,
+    })
+  }
+  handleCancel = () => {
+    this.setState({
+      visible: false,
+    })
+  }
   render() {
     const { selectedRowKeys } = this.state
     const rowSelection = {
@@ -65,8 +115,39 @@ class KeyList extends React.Component {
 
     const { loading, dataSource } = this.props
     const { noRowSelected, deleteInProgress } = this.state
+    const { visible, confirmLoading, name, publicKey } = this.state
     return (
       <div>
+        <Modal title="Create Key"
+          wrapClassName="vertical-center-modal"
+          visible={visible}
+          onOk={this.handleOk}
+          confirmLoading={confirmLoading}
+          onCancel={this.handleCancel}
+        >
+          <Row>
+            <Col span={4} style={{ marginLeft: 24, marginTop: 5 }}>
+              <p>Name</p>
+            </Col>
+            <Col span={16}>
+              <Input placeholder="Name" onChange={this.onNameChange} value={name} style={{ marginBottom: 5 }} />
+            </Col>
+          </Row>
+          <Row>
+            <Col span={4} style={{ marginLeft: 24, marginTop: 5 }}>
+              <p>Public Key</p>
+            </Col>
+            <Col span={16}>
+              <Input placeholder="ssh-rsa AAAAB3Nz..." onChange={this.onPublicKeyChange} value={publicKey} />
+            </Col>
+          </Row>
+        </Modal>
+        <Button
+          type="primary"
+          onClick={this.showModal}
+          style={{ marginBottom: 5 }}
+        >
+        Create</Button>
         <Button
           type="danger"
           onClick={this.onClickDelete}
@@ -94,6 +175,7 @@ KeyList.propTypes = {
   loading: PropTypes.bool,
   dataSource: PropTypes.array,
   deleteCredential: PropTypes.func,
+  createCredential: PropTypes.func,
 }
 
 export default KeyList

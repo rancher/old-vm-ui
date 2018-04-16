@@ -3,10 +3,12 @@ import { connect } from 'dva'
 import InstanceCreate from './InstanceCreate'
 import InstanceLister from './InstanceLister'
 
-function Instances({ instances, loading, dispatch }) {
+function Instances({ instances, credentials, loading, dispatch }) {
   const { data } = instances
+  const credentialData = credentials.data
 
   const instanceCreateProps = {
+    credentialData,
     createInstance(record) {
       dispatch({
         type: 'instances/create',
@@ -45,8 +47,9 @@ function Instances({ instances, loading, dispatch }) {
 
 Instances.propTypes = {
   instances: PropTypes.object,
+  credentials: PropTypes.object,
   loading: PropTypes.bool,
   dispatch: PropTypes.func,
 }
 
-export default connect(({ instances, loading }) => ({ instances, loading: loading.models.instance }))(Instances)
+export default connect(({ instances, credentials, loading }) => ({ instances, credentials, loading: loading.models.instance }))(Instances)
