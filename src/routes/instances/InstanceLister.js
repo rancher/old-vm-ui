@@ -53,6 +53,21 @@ class InstanceLister extends React.Component {
         key: 'ip',
         width: 120,
       }, {
+        title: 'Credentials',
+        dataIndex: 'spec.public_keys',
+        key: 'publicKeys',
+        width: 50,
+        render: (value) => {
+          let out = ''
+          for (let i = 0; i < value.length; i++) {
+            if (i > 0) {
+              out += ', '
+            }
+            out += value[i]
+          }
+          return out
+        },
+      }, {
         title: 'vCPU',
         dataIndex: 'spec.cpus',
         key: 'cpus',
