@@ -56,7 +56,7 @@ class InstanceLister extends React.Component {
         title: 'Credentials',
         dataIndex: 'spec.public_keys',
         key: 'publicKeys',
-        width: 50,
+        width: 100,
         render: (value) => {
           let out = ''
           for (let i = 0; i < value.length; i++) {
@@ -91,7 +91,7 @@ class InstanceLister extends React.Component {
         title: 'State',
         dataIndex: 'status.state',
         key: 'state',
-        width: 70,
+        width: 80,
         className: styles['status-pending'],
         fixed: 'right',
         render: (value) => {
