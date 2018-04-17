@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react'
-import { Button, Modal, Slider, InputNumber, Row, Col, Checkbox, Input, Menu, Dropdown, Select } from 'antd'
+import { Button, Modal, Slider, InputNumber, Row, Col, Checkbox, Input, Menu, Dropdown, Select, Tooltip } from 'antd'
 const SubMenu = Menu.SubMenu
 const Option = Select.Option
 
@@ -22,6 +22,7 @@ class InstanceCreate extends React.Component {
     memory: 512,
     image: 'ubuntu:16.04.4-server-amd64',
     start: true,
+    novnc: false,
     publicKeys: [],
   }
   onNameChange = (e) => {
@@ -49,6 +50,11 @@ class InstanceCreate extends React.Component {
   onActionChange = (e) => {
     this.setState({
       start: e.target.checked,
+    })
+  }
+  onNovncChange = (e) => {
+    this.setState({
+      novnc: e.target.checked,
     })
   }
   onPublicKeyChange = (values) => {
@@ -84,6 +90,7 @@ class InstanceCreate extends React.Component {
       image: this.state.image,
       action: this.state.action,
       pubkey: this.state.publicKeys,
+      novnc: this.state.novnc,
     })
     clearTimeout(timeout)
     this.setState({
@@ -202,6 +209,11 @@ class InstanceCreate extends React.Component {
           </Row>
           <Row>
             <Checkbox defaultChecked onChange={this.onActionChange} style={{ marginTop: 16 }}>Start Instance Immediately</Checkbox>
+          </Row>
+          <Row>
+            <Tooltip title="Recommended for Desktop Images only">
+              <Checkbox onChange={this.onNovncChange} style={{ marginTop: 16 }}>Enable NoVNC</Checkbox>
+            </Tooltip>
           </Row>
         </Modal>
       </div>
