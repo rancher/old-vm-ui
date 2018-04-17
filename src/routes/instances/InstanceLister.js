@@ -126,7 +126,7 @@ class InstanceLister extends React.Component {
         width: 45,
         fixed: 'right',
         render: (record) => {
-          if (record.status.state !== 'running') {
+          if (record.status.state !== 'running' || record.spec.hosted_novnc === false || record.status.vnc_endpoint === '') {
             return (
               <Button type="primary" icon="eye-o" size="small" disabled></Button>
             )
