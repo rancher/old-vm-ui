@@ -16,7 +16,6 @@ class InstanceCreate extends React.Component {
   state = {
     visible: false,
     confirmLoading: false,
-    namespace: 'default',
     name: '',
     cpus: 1,
     memory: 512,
@@ -83,7 +82,6 @@ class InstanceCreate extends React.Component {
       this.state.action = 'stop'
     }
     this.props.createInstance({
-      namespace: this.state.namespace,
       name: this.state.name,
       cpus: this.state.cpus,
       memory: this.state.memory,
@@ -132,7 +130,7 @@ class InstanceCreate extends React.Component {
 
     return (
       <div>
-        <Button type="primary" onClick={this.showModal} style={{ marginBottom: 5 }}>Create Instance</Button>
+        <Button type="primary" onClick={this.showModal} style={{ marginBottom: 5 }}>Create</Button>
         <Modal title="Create Instance"
           wrapClassName="vertical-center-modal"
           visible={visible}

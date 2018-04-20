@@ -36,9 +36,6 @@ class KeyList extends React.Component {
   onSelectChange = (selectedRowKeys) => {
     this.setState({ selectedRowKeys, noRowSelected: selectedRowKeys.length === 0 })
   }
-  onClickCreate = () => {
-
-  }
   onClickDelete = () => {
     const { selectedRowKeys } = this.state
     this.handleDeletes(selectedRowKeys)

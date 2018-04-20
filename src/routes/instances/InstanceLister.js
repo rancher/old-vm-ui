@@ -1,11 +1,18 @@
 import React, { PropTypes } from 'react'
 import { Button, Modal, Radio, Table } from 'antd'
+const ButtonGroup = Button.Group
 const confirm = Modal.confirm
 import styles from './InstanceLister.less'
 
 class InstanceLister extends React.Component {
+  state = {
+    selectedRowKeys: [],
+    noRowSelected: true,
+  }
+  onSelectChange = (selectedRowKeys) => {
+    this.setState({ selectedRowKeys, noRowSelected: selectedRowKeys.length === 0 })
+  }
 
-  state = {}
   sleep = (time) => {
     return new Promise((resolve) => setTimeout(resolve, time))
   }
@@ -14,19 +21,64 @@ class InstanceLister extends React.Component {
       this.forceUpdate()
     })
   }
-  handleActionChange = (record, event) => {
-    this.props.actionInstance(record, event.target.value)
-    this.delayedUpdate(1000)
+  startInstances = () => {
+    this.actionInstances('start')
   }
-  handleDelete = (record) => {
-    const x = this
+  stopInstances = () => {
+    this.actionInstances('stop')
+  }
+  actionInstances = (action) => {
+    const { selectedRowKeys, noRowSelected } = this.state
+    if (noRowSelected) { return }
+
+    const { actionInstance, dataSource } = this.props
     confirm({
-      title: `Are you sure you want to delete vm ${record.metadata.namespace}/${record.metadata.name} ?`,
+      title: `Are you sure you want to ${action} vms ${selectedRowKeys}?`,
       onOk() {
-        x.props.deleteInstance(record)
-        x.delayedUpdate(1000)
+        for (let i = 0; i < selectedRowKeys.length; i++) {
+          const rowKey = selectedRowKeys[i]
+
+          // find matching entry in dataSource
+          let row = null
+          for (let j = 0; j < dataSource.length; j++) {
+            if (dataSource[j].metadata.name === rowKey) {
+              row = dataSource[j]
+              break
+            }
+          }
+
+          // send a request iff action changed
+          if (row !== null && row.spec.action !== action) {
+            actionInstance(row.metadata.name, action)
+          }
+        }
       },
     })
+  }
+
+  deleteInstances = () => {
+    const { selectedRowKeys, noRowSelected } = this.state
+    if (noRowSelected) { return }
+
+    const x = this
+    const { deleteInstance } = this.props
+    confirm({
+      title: `Are you sure you want to delete vms ${selectedRowKeys}?`,
+      onOk() {
+        for (let i = 0; i < selectedRowKeys.length; i++) {
+          const name = selectedRowKeys[i]
+          deleteInstance({ name })
+        }
+        // x.onSelectChange([])
+        x.forceUpdate()
+      },
+    })
+  }
+  handleActionChange = (record, event) => {
+    const { name } = record.metadata
+    const { value } = event.target
+    this.props.actionInstance(name, value)
+    this.delayedUpdate(1000)
   }
   handleVnc = (record) => {
     let url = `http://${record.status.vnc_endpoint}?autoconnect=true`
@@ -35,12 +87,6 @@ class InstanceLister extends React.Component {
   render() {
     const columns = [
       {
-        title: 'Namespace',
-        dataIndex: 'metadata.namespace',
-        key: 'namespace',
-        width: 90,
-        fixed: 'left',
-      }, {
         title: 'Name',
         dataIndex: 'metadata.name',
         key: 'name',
@@ -106,15 +152,14 @@ class InstanceLister extends React.Component {
       }, {
         title: 'Actions',
         key: 'action',
-        width: 185,
+        width: 120,
         fixed: 'right',
         render: (record) => {
           return (
             <div>
               <Radio.Group value={record.spec.action} size="small" onChange={e => this.handleActionChange(record, e)}>
-                <Radio.Button value="stop">Stop</Radio.Button>
                 <Radio.Button value="start">Start</Radio.Button>
-                <Radio.Button value="reboot" disabled>Reboot</Radio.Button>
+                <Radio.Button value="stop">Stop</Radio.Button>
               </Radio.Group>
             </div>
           )
@@ -136,30 +181,30 @@ class InstanceLister extends React.Component {
           )
         },
       },
-      {
-        title: 'Terminate',
-        key: 'terminate',
-        width: 75,
-        fixed: 'right',
-        render: (record) => {
-          return (
-            <Button type="danger" value="delete" size="small" onClick={e => this.handleDelete(record, e)}>Delete</Button>
-          )
-        },
-      },
     ]
 
     const bordered = true
     const { loading, dataSource } = this.props
+    const { selectedRowKeys, noRowSelected } = this.state
+    const rowSelection = {
+      selectedRowKeys,
+      onChange: this.onSelectChange,
+      hideDefaultSelections: true,
+    }
 
     return (
       <div>
+        <ButtonGroup style={{ marginBottom: 5, marginRight: 5 }}>
+          <Button type="default" onClick={this.startInstances} disabled={noRowSelected}>Start</Button>
+          <Button type="default" onClick={this.stopInstances} disabled={noRowSelected}>Stop</Button>
+        </ButtonGroup>
+        <Button type="danger" onClick={this.deleteInstances} style={{ marginBottom: 5 }} disabled={noRowSelected}>Delete</Button>
         <Table
           bordered={bordered}
           columns={columns}
           dataSource={dataSource}
           loading={loading}
-          simple
+          rowSelection={rowSelection}
           size="small"
           pagination={{ pageSize: 10 }}
           scroll={{ x: 1200, y: 500 }}
