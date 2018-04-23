@@ -168,7 +168,7 @@ class InstanceLister extends React.Component {
       {
         title: 'VNC',
         key: 'vnc',
-        width: 45,
+        width: 50,
         fixed: 'right',
         render: (record) => {
           if (record.status.state !== 'running' || record.spec.hosted_novnc === false || record.status.vnc_endpoint === '') {
