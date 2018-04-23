@@ -5,6 +5,7 @@ export default {
   namespace: 'instances',
   state: {
     data: [],
+    createInstanceModalVisible: false,
   },
   subscriptions: {
     setup({ dispatch, history }) {
@@ -27,6 +28,7 @@ export default {
     *create({
       payload,
     }, { call, put }) {
+      yield put({ type: 'hideCreateInstanceModal' })
       yield call(createInstance, payload)
       yield put({ type: 'query' })
     },
@@ -50,6 +52,12 @@ export default {
         ...state,
         ...action.payload,
       }
+    },
+    showCreateInstanceModal(state, action) {
+      return { ...state, ...action.payload, createInstanceModalVisible: true }
+    },
+    hideCreateInstanceModal(state) {
+      return { ...state, createInstanceModalVisible: false }
     },
   },
 }

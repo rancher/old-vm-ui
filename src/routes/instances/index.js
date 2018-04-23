@@ -1,18 +1,33 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'dva'
-import InstanceCreate from './InstanceCreate'
+import GroupActions from './GroupActions'
+import CreateInstance from './CreateInstance'
 import InstanceLister from './InstanceLister'
 
 function Instances({ instances, credentials, loading, dispatch }) {
-  const { data } = instances
+  const { data, createInstanceModalVisible } = instances
   const credentialData = credentials.data
 
-  const instanceCreateProps = {
+  const groupActions = {
+    createInstance() {
+      dispatch({
+        type: 'instances/showCreateInstanceModal',
+      })
+    },
+  }
+
+  const createInstanceModalProps = {
     credentialData,
-    createInstance(record) {
+    visible: createInstanceModalVisible,
+    onOk(payload) {
       dispatch({
         type: 'instances/create',
-        payload: record,
+        payload,
+      })
+    },
+    onCancel() {
+      dispatch({
+        type: 'instances/hideCreateInstanceModal',
       })
     },
   }
@@ -39,7 +54,8 @@ function Instances({ instances, credentials, loading, dispatch }) {
 
   return (
     <div>
-      <InstanceCreate {...instanceCreateProps} />
+      <GroupActions {...groupActions} />
+      <CreateInstance {...createInstanceModalProps} />
       <InstanceLister {...instanceListProps} />
     </div>
   )

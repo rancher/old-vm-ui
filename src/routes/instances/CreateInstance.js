@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react'
-import { Button, Modal, Slider, InputNumber, Row, Col, Checkbox, Input, Menu, Dropdown, Select, Tooltip } from 'antd'
+import { Modal, Slider, InputNumber, Row, Col, Checkbox, Input, Menu, Dropdown, Select, Tooltip } from 'antd'
 const SubMenu = Menu.SubMenu
 const Option = Select.Option
 
@@ -12,9 +12,8 @@ const memoryMarks = {
   8192: '',
 }
 
-class InstanceCreate extends React.Component {
+class CreateInstance extends React.Component {
   state = {
-    visible: false,
     confirmLoading: false,
     name: '',
     cpus: 1,
@@ -67,28 +66,11 @@ class InstanceCreate extends React.Component {
       publicKeys: values,
     })
   }
-  showModal = () => {
-    this.setState({
-      visible: true,
-    })
-  }
   handleOk = () => {
-    const timeout = setTimeout(() => {
-      this.setState({
-        visible: false,
-        confirmLoading: false,
-      })
-    }, 3000)
-    this.setState({
-      confirmLoading: true,
-    })
-    if (this.state.start === true) {
-      this.state.action = 'start'
-    } else {
-      this.state.action = 'stop'
-    }
-    const { name, cpus, memory, image, action, publicKeys, novnc, instanceCount } = this.state
-    this.props.createInstance({
+    const { onOk } = this.props
+    const { name, cpus, memory, image, publicKeys, novnc, instanceCount, start } = this.state
+    const action = start === true ? 'start' : 'stop'
+    onOk({
       name,
       cpus,
       memory,
@@ -98,19 +80,9 @@ class InstanceCreate extends React.Component {
       novnc,
       instances: instanceCount,
     })
-    clearTimeout(timeout)
-    this.setState({
-      visible: false,
-      confirmLoading: false,
-    })
-  }
-  handleCancel = () => {
-    this.setState({
-      visible: false,
-    })
   }
   render() {
-    const { visible, confirmLoading, cpus, memory, instanceCount, image } = this.state
+    const { confirmLoading, cpus, memory, instanceCount, image } = this.state
     // TODO: Image data should come from backend. Consider supporting volumes
     // from base images and VM images in the near future
     const menu = (
@@ -130,7 +102,7 @@ class InstanceCreate extends React.Component {
     )
 
     const credentials = []
-    const { credentialData } = this.props
+    const { credentialData, visible, onCancel } = this.props
     for (let i = 0; i < credentialData.length; i++) {
       const { name } = credentialData[i].metadata
       credentials.push(<Option key={name}>{name}</Option>)
@@ -138,13 +110,12 @@ class InstanceCreate extends React.Component {
 
     return (
       <div>
-        <Button type="primary" onClick={this.showModal} style={{ marginBottom: 5 }}>Create</Button>
         <Modal title="Create Instance"
           wrapClassName="vertical-center-modal"
           visible={visible}
           onOk={this.handleOk}
+          onCancel={onCancel}
           confirmLoading={confirmLoading}
-          onCancel={this.handleCancel}
         >
           <Row>
             <Col span={4} style={{ marginLeft: 24, marginTop: 5 }}>
@@ -244,9 +215,11 @@ class InstanceCreate extends React.Component {
   }
 }
 
-InstanceCreate.propTypes = {
+CreateInstance.propTypes = {
   credentialData: PropTypes.array,
-  createInstance: PropTypes.func,
+  visible: PropTypes.bool,
+  onOk: PropTypes.func,
+  onCancel: PropTypes.func,
 }
 
-export default InstanceCreate
+export default CreateInstance
