@@ -18,7 +18,38 @@ export async function createInstance(params) {
   })
 }
 
-export async function actionInstance(record, action) {
+export async function deleteInstances(payload) {
+  return request({
+    url: '/v1/instances/delete',
+    method: 'post',
+    data: {
+      names: payload,
+    },
+  })
+}
+
+export function actionInstances(payload, action) {
+  return request({
+    url: `/v1/instances/${action}`,
+    method: 'post',
+    data: {
+      names: payload,
+    },
+  })
+}
+
+export async function startInstances(payload) {
+  return actionInstances(payload, 'start')
+}
+
+export async function stopInstances(payload) {
+  return actionInstances(payload, 'stop')
+}
+
+// these are superseded by the multi calls
+
+export async function actionInstance(payload) {
+  const { record, action } = payload
   return request({
     url: `/v1/instances/${record}/${action}`,
     method: 'post',
@@ -30,24 +61,4 @@ export async function deleteInstance(name) {
     url: `/v1/instances/${name}`,
     method: 'delete',
   })
-}
-
-// TODO these functions should make 1 API call
-
-export async function startInstances(payload) {
-  for (let i = 0; i < payload.length; i++) {
-    actionInstance(payload[i], 'start')
-  }
-}
-
-export async function stopInstances(payload) {
-  for (let i = 0; i < payload.length; i++) {
-    actionInstance(payload[i], 'stop')
-  }
-}
-
-export async function deleteInstances(payload) {
-  for (let i = 0; i < payload.length; i++) {
-    deleteInstance(payload[i])
-  }
 }
