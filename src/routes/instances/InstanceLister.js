@@ -1,17 +1,9 @@
 import React, { PropTypes } from 'react'
-import { Button, Modal, Radio, Table } from 'antd'
-const ButtonGroup = Button.Group
-const confirm = Modal.confirm
+import { Button, Radio, Table } from 'antd'
 import styles from './InstanceLister.less'
 
 class InstanceLister extends React.Component {
-  state = {
-    selectedRowKeys: [],
-    noRowSelected: true,
-  }
-  onSelectChange = (selectedRowKeys) => {
-    this.setState({ selectedRowKeys, noRowSelected: selectedRowKeys.length === 0 })
-  }
+  state = {}
 
   sleep = (time) => {
     return new Promise((resolve) => setTimeout(resolve, time))
@@ -21,59 +13,7 @@ class InstanceLister extends React.Component {
       this.forceUpdate()
     })
   }
-  startInstances = () => {
-    this.actionInstances('start')
-  }
-  stopInstances = () => {
-    this.actionInstances('stop')
-  }
-  actionInstances = (action) => {
-    const { selectedRowKeys, noRowSelected } = this.state
-    if (noRowSelected) { return }
 
-    const { actionInstance, dataSource } = this.props
-    confirm({
-      title: `Are you sure you want to ${action} vms ${selectedRowKeys}?`,
-      onOk() {
-        for (let i = 0; i < selectedRowKeys.length; i++) {
-          const rowKey = selectedRowKeys[i]
-
-          // find matching entry in dataSource
-          let row = null
-          for (let j = 0; j < dataSource.length; j++) {
-            if (dataSource[j].metadata.name === rowKey) {
-              row = dataSource[j]
-              break
-            }
-          }
-
-          // send a request iff action changed
-          if (row !== null && row.spec.action !== action) {
-            actionInstance(row.metadata.name, action)
-          }
-        }
-      },
-    })
-  }
-
-  deleteInstances = () => {
-    const { selectedRowKeys, noRowSelected } = this.state
-    if (noRowSelected) { return }
-
-    const x = this
-    const { deleteInstance } = this.props
-    confirm({
-      title: `Are you sure you want to delete vms ${selectedRowKeys}?`,
-      onOk() {
-        for (let i = 0; i < selectedRowKeys.length; i++) {
-          const name = selectedRowKeys[i]
-          deleteInstance({ name })
-        }
-        // x.onSelectChange([])
-        x.forceUpdate()
-      },
-    })
-  }
   handleActionChange = (record, event) => {
     const { name } = record.metadata
     const { value } = event.target
@@ -184,21 +124,15 @@ class InstanceLister extends React.Component {
     ]
 
     const bordered = true
-    const { loading, dataSource } = this.props
-    const { selectedRowKeys, noRowSelected } = this.state
+    const { loading, dataSource, onSelectChange, selectedRowKeys } = this.props
     const rowSelection = {
       selectedRowKeys,
-      onChange: this.onSelectChange,
+      onChange: onSelectChange,
       hideDefaultSelections: true,
     }
 
     return (
       <div>
-        <ButtonGroup style={{ marginBottom: 5, marginRight: 5 }}>
-          <Button type="default" onClick={this.stopInstances} disabled={noRowSelected}>Stop</Button>
-          <Button type="default" onClick={this.startInstances} disabled={noRowSelected}>Start</Button>
-        </ButtonGroup>
-        <Button type="danger" onClick={this.deleteInstances} style={{ marginBottom: 5 }} disabled={noRowSelected}>Delete</Button>
         <Table
           bordered={bordered}
           columns={columns}
@@ -220,6 +154,8 @@ InstanceLister.propTypes = {
   dataSource: PropTypes.array,
   deleteInstance: PropTypes.func,
   actionInstance: PropTypes.func,
+  onSelectChange: PropTypes.func,
+  selectedRowKeys: PropTypes.array,
 }
 
 export default InstanceLister

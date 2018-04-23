@@ -5,15 +5,34 @@ import CreateInstance from './CreateInstance'
 import InstanceLister from './InstanceLister'
 
 function Instances({ instances, credentials, loading, dispatch }) {
-  const { data, createInstanceModalVisible } = instances
+  const { data, createInstanceModalVisible, selectedRowKeys, noRowSelected } = instances
   const credentialData = credentials.data
 
   const groupActions = {
-    createInstance() {
+    create() {
       dispatch({
         type: 'instances/showCreateInstanceModal',
       })
     },
+    stopSelected() {
+      dispatch({
+        type: 'instances/stopSelected',
+        payload: selectedRowKeys,
+      })
+    },
+    startSelected() {
+      dispatch({
+        type: 'instances/startSelected',
+        payload: selectedRowKeys,
+      })
+    },
+    deleteSelected() {
+      dispatch({
+        type: 'instances/deleteSelected',
+        payload: selectedRowKeys,
+      })
+    },
+    noRowSelected,
   }
 
   const createInstanceModalProps = {
@@ -50,6 +69,13 @@ function Instances({ instances, credentials, loading, dispatch }) {
         },
       })
     },
+    onSelectChange(selectedKeys) {
+      dispatch({
+        type: 'instances/updateSelectedRows',
+        selectedKeys,
+      })
+    },
+    selectedRowKeys,
   }
 
   return (

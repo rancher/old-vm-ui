@@ -1,4 +1,4 @@
-import { query, deleteInstance, actionInstance, createInstance } from '../services/instances'
+import { query, deleteInstance, actionInstance, createInstance, startInstances, stopInstances, deleteInstances } from '../services/instances'
 import { parse } from 'qs'
 
 export default {
@@ -6,6 +6,8 @@ export default {
   state: {
     data: [],
     createInstanceModalVisible: false,
+    selectedRowKeys: [],
+    noRowSelected: true,
   },
   subscriptions: {
     setup({ dispatch, history }) {
@@ -45,6 +47,27 @@ export default {
       yield call(deleteInstance, payload)
       yield put({ type: 'query' })
     },
+    *startSelected({
+      payload,
+    }, { call, put }) {
+      yield call(startInstances, payload)
+      yield put({ type: 'clearSelectedRows' })
+      yield put({ type: 'query' })
+    },
+    *stopSelected({
+      payload,
+    }, { call, put }) {
+      yield call(stopInstances, payload)
+      yield put({ type: 'clearSelectedRows' })
+      yield put({ type: 'query' })
+    },
+    *deleteSelected({
+      payload,
+    }, { call, put }) {
+      yield call(deleteInstances, payload)
+      yield put({ type: 'clearSelectedRows' })
+      yield put({ type: 'query' })
+    },
   },
   reducers: {
     queryInstance(state, action) {
@@ -58,6 +81,13 @@ export default {
     },
     hideCreateInstanceModal(state) {
       return { ...state, createInstanceModalVisible: false }
+    },
+    updateSelectedRows(state, payload) {
+      const { selectedKeys: selectedRowKeys } = payload
+      return { ...state, selectedRowKeys, noRowSelected: selectedRowKeys.length === 0 }
+    },
+    clearSelectedRows(state) {
+      return { ...state, selectedRowKeys: [], noRowSelected: true }
     },
   },
 }
