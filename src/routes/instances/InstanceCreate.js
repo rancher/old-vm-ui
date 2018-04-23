@@ -19,6 +19,7 @@ class InstanceCreate extends React.Component {
     name: '',
     cpus: 1,
     memory: 512,
+    instanceCount: 1,
     image: 'ubuntu:16.04.4-server-amd64',
     start: true,
     novnc: false,
@@ -38,6 +39,11 @@ class InstanceCreate extends React.Component {
   onMemoryChange = (value) => {
     this.setState({
       memory: value,
+    })
+  }
+  onInstanceCountChange = (value) => {
+    this.setState({
+      instanceCount: value,
     })
   }
   onImageSelected = (e) => {
@@ -81,14 +87,16 @@ class InstanceCreate extends React.Component {
     } else {
       this.state.action = 'stop'
     }
+    const { name, cpus, memory, image, action, publicKeys, novnc, instanceCount } = this.state
     this.props.createInstance({
-      name: this.state.name,
-      cpus: this.state.cpus,
-      memory: this.state.memory,
-      image: this.state.image,
-      action: this.state.action,
-      pubkey: this.state.publicKeys,
-      novnc: this.state.novnc,
+      name,
+      cpus,
+      memory,
+      image,
+      action,
+      pubkey: publicKeys,
+      novnc,
+      instances: instanceCount,
     })
     clearTimeout(timeout)
     this.setState({
@@ -102,7 +110,7 @@ class InstanceCreate extends React.Component {
     })
   }
   render() {
-    const { visible, confirmLoading, cpus, memory, image } = this.state
+    const { visible, confirmLoading, cpus, memory, instanceCount, image } = this.state
     // TODO: Image data should come from backend. Consider supporting volumes
     // from base images and VM images in the near future
     const menu = (
@@ -177,6 +185,23 @@ class InstanceCreate extends React.Component {
                 style={{ marginLeft: 16 }}
                 value={memory}
                 onChange={this.onMemoryChange}
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col span={4} style={{ marginLeft: 24, marginTop: 5 }}>
+              <p>Instances</p>
+            </Col>
+            <Col span={12}>
+              <Slider min={1} max={20} onChange={this.onInstanceCountChange} value={instanceCount} />
+            </Col>
+            <Col span={4}>
+              <InputNumber
+                min={1}
+                max={20}
+                style={{ marginLeft: 16 }}
+                value={instanceCount}
+                onChange={this.onInstanceCountChange}
               />
             </Col>
           </Row>

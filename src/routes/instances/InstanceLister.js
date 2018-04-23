@@ -158,8 +158,8 @@ class InstanceLister extends React.Component {
           return (
             <div>
               <Radio.Group value={record.spec.action} size="small" onChange={e => this.handleActionChange(record, e)}>
-                <Radio.Button value="start">Start</Radio.Button>
                 <Radio.Button value="stop">Stop</Radio.Button>
+                <Radio.Button value="start">Start</Radio.Button>
               </Radio.Group>
             </div>
           )
@@ -195,8 +195,8 @@ class InstanceLister extends React.Component {
     return (
       <div>
         <ButtonGroup style={{ marginBottom: 5, marginRight: 5 }}>
-          <Button type="default" onClick={this.startInstances} disabled={noRowSelected}>Start</Button>
           <Button type="default" onClick={this.stopInstances} disabled={noRowSelected}>Stop</Button>
+          <Button type="default" onClick={this.startInstances} disabled={noRowSelected}>Start</Button>
         </ButtonGroup>
         <Button type="danger" onClick={this.deleteInstances} style={{ marginBottom: 5 }} disabled={noRowSelected}>Delete</Button>
         <Table
