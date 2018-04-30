@@ -13,4 +13,4 @@ EXPOSE 8000
 ENV LONGHORN_MANAGER_IP http://localhost:9500
 RUN npm run build
 
-CMD ["/bin/bash", "-c", "envsubst '${LONGHORN_MANAGER_IP}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"]
+CMD ["/bin/bash", "-c", "envsubst '${RANCHERVM_BACKEND_SERVICE_HOST},${RANCHERVM_BACKEND_SERVICE_PORT}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"]
