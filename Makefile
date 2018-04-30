@@ -1,4 +1,4 @@
-NS = llparse
+NS = rancher
 VERSION = $(shell ./scripts/version)
 
 REPO = ranchervm-frontend
