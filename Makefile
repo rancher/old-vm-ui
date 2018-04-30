@@ -1,8 +1,8 @@
 NS = rancher
 VERSION = $(shell ./scripts/version)
 
-REPO = ranchervm-frontend
-NAME = ranchervm-frontend
+REPO = vm-frontend
+NAME = vm-frontend
 INSTANCE = default
 LONHORN_MANAGER_IP = http://localhost:9500
 PORT = 8000
