@@ -74,6 +74,11 @@ class InstanceLister extends React.Component {
         key: 'launchTime',
         width: 150,
       }, {
+        title: 'Node Name',
+        dataIndex: 'status.node_name',
+        key: 'nodeName',
+        width: 120,
+      }, {
         title: 'State',
         dataIndex: 'status.state',
         key: 'state',
@@ -92,7 +97,7 @@ class InstanceLister extends React.Component {
       }, {
         title: 'Actions',
         key: 'action',
-        width: 120,
+        width: 190,
         fixed: 'right',
         render: (record) => {
           return (
@@ -100,6 +105,7 @@ class InstanceLister extends React.Component {
               <Radio.Group value={record.spec.action} size="small" onChange={e => this.handleActionChange(record, e)}>
                 <Radio.Button value="stop">Stop</Radio.Button>
                 <Radio.Button value="start">Start</Radio.Button>
+                <Radio.Button value="migrate">Migrate</Radio.Button>
               </Radio.Group>
             </div>
           )
