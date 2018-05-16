@@ -106,8 +106,28 @@ class Hosts extends React.Component {
         },
       },
       {
-        title: 'Ready',
+        title: 'PID Pressure',
         dataIndex: 'status.conditions[3].status',
+        key: 'pidPressure',
+        fixed: 'right',
+        width: 100,
+        render: (value) => {
+          let targetClass = styles['status-bad']
+          if (value === 'False') {
+            targetClass = styles['status-good']
+          }
+          const obj = {
+            children: value,
+            props: {
+              className: targetClass,
+            },
+          }
+          return obj
+        },
+      },
+      {
+        title: 'Ready',
+        dataIndex: 'status.conditions[4].status',
         key: 'ready',
         fixed: 'right',
         width: 60,
