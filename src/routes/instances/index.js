@@ -26,6 +26,12 @@ function Instances({ instances, credentials, loading, dispatch }) {
         payload: selectedRowKeys,
       })
     },
+    migrateSelected() {
+      dispatch({
+        type: 'instances/migrateSelected',
+        payload: selectedRowKeys,
+      })
+    },
     deleteSelected() {
       dispatch({
         type: 'instances/deleteSelected',

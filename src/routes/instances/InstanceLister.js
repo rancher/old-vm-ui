@@ -102,10 +102,10 @@ class InstanceLister extends React.Component {
         render: (record) => {
           return (
             <div>
-              <Radio.Group value={record.spec.action} size="small" onChange={e => this.handleActionChange(record, e)}>
+              <Radio.Group value={record.spec.action} size="small" onChange={e => this.handleActionChange(record, e)} disabled={record.status.state === 'migrating'}>
                 <Radio.Button value="stop">Stop</Radio.Button>
                 <Radio.Button value="start">Start</Radio.Button>
-                <Radio.Button value="migrate">Migrate</Radio.Button>
+                <Radio.Button value="migrate" disabled={record.status.state !== 'running'}>Migrate</Radio.Button>
               </Radio.Group>
             </div>
           )

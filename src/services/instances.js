@@ -18,36 +18,6 @@ export async function createInstance(params) {
   })
 }
 
-export async function deleteInstances(payload) {
-  return request({
-    url: '/v1/instances/delete',
-    method: 'post',
-    data: {
-      names: payload,
-    },
-  })
-}
-
-export function actionInstances(payload, action) {
-  return request({
-    url: `/v1/instances/${action}`,
-    method: 'post',
-    data: {
-      names: payload,
-    },
-  })
-}
-
-export async function startInstances(payload) {
-  return actionInstances(payload, 'start')
-}
-
-export async function stopInstances(payload) {
-  return actionInstances(payload, 'stop')
-}
-
-// these are superseded by the multi calls
-
 export async function actionInstance(payload) {
   const { record, action } = payload
   return request({
@@ -62,3 +32,17 @@ export async function deleteInstance(name) {
     method: 'delete',
   })
 }
+
+export function actionInstances(payload, action) {
+  return request({
+    url: `/v1/instances/${action}`,
+    method: 'post',
+    data: {
+      names: payload,
+    },
+  })
+}
+export async function startInstances(payload) { return actionInstances(payload, 'start') }
+export async function stopInstances(payload) { return actionInstances(payload, 'stop') }
+export async function migrateInstances(payload) { return actionInstances(payload, 'migrate') }
+export async function deleteInstances(payload) { return actionInstances(payload, 'delete') }

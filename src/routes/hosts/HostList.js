@@ -17,12 +17,6 @@ class Hosts extends React.Component {
         fixed: 'left',
       },
       {
-        title: 'Private IP',
-        dataIndex: 'status.addresses[0].address',
-        key: 'privateIP',
-        width: 110,
-      },
-      {
         title: 'CPUs',
         dataIndex: 'status.allocatable.cpu',
         key: 'cpuAllocable',
@@ -39,6 +33,12 @@ class Hosts extends React.Component {
         dataIndex: 'status.capacity.pods',
         key: 'podCapacity',
         width: 60,
+      },
+      {
+        title: 'Private IP',
+        dataIndex: 'status.addresses[0].address',
+        key: 'privateIP',
+        width: 110,
       },
       {
         title: 'Hostname',

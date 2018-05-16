@@ -1,4 +1,4 @@
-import { query, deleteInstance, actionInstance, createInstance, startInstances, stopInstances, deleteInstances } from '../services/instances'
+import { query, deleteInstance, actionInstance, createInstance, startInstances, stopInstances, migrateInstances, deleteInstances } from '../services/instances'
 import { parse } from 'qs'
 
 export default {
@@ -58,6 +58,13 @@ export default {
       payload,
     }, { call, put }) {
       yield call(stopInstances, payload)
+      yield put({ type: 'clearSelectedRows' })
+      yield put({ type: 'query' })
+    },
+    *migrateSelected({
+      payload,
+    }, { call, put }) {
+      yield call(migrateInstances, payload)
       yield put({ type: 'clearSelectedRows' })
       yield put({ type: 'query' })
     },
