@@ -38,6 +38,7 @@ function Instances({ instances, credentials, hosts, loading, dispatch }) {
 
   const createInstanceModalProps = {
     credentialData,
+    hostData,
     visible: createInstanceModalVisible,
     onOk(payload) {
       dispatch({

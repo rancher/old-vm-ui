@@ -23,6 +23,7 @@ class CreateInstance extends React.Component {
     start: true,
     novnc: false,
     publicKeys: [],
+    nodeName: '',
   }
   onNameChange = (e) => {
     const { value } = e.target
@@ -66,9 +67,14 @@ class CreateInstance extends React.Component {
       publicKeys: values,
     })
   }
+  onNodeNameChange = (value) => {
+    this.setState({
+      nodeName: value,
+    })
+  }
   handleOk = () => {
     const { onOk } = this.props
-    const { name, cpus, memory, image, publicKeys, novnc, instanceCount, start } = this.state
+    const { name, cpus, memory, image, publicKeys, novnc, instanceCount, start, nodeName } = this.state
     const action = start === true ? 'start' : 'stop'
     onOk({
       name,
@@ -79,6 +85,7 @@ class CreateInstance extends React.Component {
       pubkey: publicKeys,
       novnc,
       instances: instanceCount,
+      node_name: nodeName,
     })
   }
   render() {
@@ -106,6 +113,13 @@ class CreateInstance extends React.Component {
     for (let i = 0; i < credentialData.length; i++) {
       const { name } = credentialData[i].metadata
       credentials.push(<Option key={name}>{name}</Option>)
+    }
+
+    const hosts = []
+    const { hostData } = this.props
+    for (let i = 0; i < hostData.length; i++) {
+      const { name } = hostData[i].metadata
+      hosts.push(<Option key={name}>{name}</Option>)
     }
 
     return (
@@ -202,6 +216,24 @@ class CreateInstance extends React.Component {
             </Col>
           </Row>
           <Row>
+            <Tooltip title="Choose a specific Kubernetes node to run your VM">
+              <Col span={4} style={{ marginLeft: 24, marginTop: 10 }}>
+                <p>Node Name</p>
+              </Col>
+              <Col span={16}>
+                <Select
+                  mode="combobox"
+                  style={{ width: '100%', marginTop: 5 }}
+                  allowClear
+                  placeholder="Optional"
+                  onChange={this.onNodeNameChange}
+                >
+                  {hosts}
+                </Select>
+              </Col>
+            </Tooltip>
+          </Row>
+          <Row>
             <Checkbox defaultChecked onChange={this.onActionChange} style={{ marginTop: 16 }}>Start Instance Immediately</Checkbox>
           </Row>
           <Row>
@@ -217,6 +249,7 @@ class CreateInstance extends React.Component {
 
 CreateInstance.propTypes = {
   credentialData: PropTypes.array,
+  hostData: PropTypes.array,
   visible: PropTypes.bool,
   onOk: PropTypes.func,
   onCancel: PropTypes.func,

@@ -104,7 +104,7 @@ class InstanceLister extends React.Component {
       }, {
         title: 'Node Name',
         key: 'nodeName',
-        width: 180,
+        width: 200,
         fixed: 'right',
         render: (record) => {
           const { onNodeSelected } = this
