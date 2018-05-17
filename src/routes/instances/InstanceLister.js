@@ -24,7 +24,7 @@ class InstanceLister extends React.Component {
     this.delayedUpdate(1000)
   }
   handleVnc = (record) => {
-    let url = `http://${record.status.vnc_endpoint}?autoconnect=true&reconnect=true&reconnect_delay=5000`
+    let url = `http://${record.status.vnc_endpoint}?autoconnect=true&reconnect=true&reconnect_delay=5000&resize=scale`
     window.open(url)
   }
   render() {
