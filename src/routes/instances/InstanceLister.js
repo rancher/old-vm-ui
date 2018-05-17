@@ -24,7 +24,7 @@ class InstanceLister extends React.Component {
     this.delayedUpdate(1000)
   }
   handleVnc = (record) => {
-    let url = `http://${record.status.vnc_endpoint}?autoconnect=true`
+    let url = `http://${record.status.vnc_endpoint}?autoconnect=true&reconnect=true&reconnect_delay=5000`
     window.open(url)
   }
   render() {
@@ -136,7 +136,7 @@ class InstanceLister extends React.Component {
         render: (record) => {
           return (
             <div>
-              <Radio.Group value={record.spec.action} size="small" onChange={e => this.handleActionChange(record, e)} disabled={record.status.state === 'migrating'}>
+              <Radio.Group value={record.spec.action} size="small" onChange={e => this.handleActionChange(record, e)}>
                 <Radio.Button value="stop">Stop</Radio.Button>
                 <Radio.Button value="start">Start</Radio.Button>
               </Radio.Group>
@@ -150,13 +150,10 @@ class InstanceLister extends React.Component {
         width: 50,
         fixed: 'right',
         render: (record) => {
-          if (record.status.state !== 'running' || record.spec.hosted_novnc === false || record.status.vnc_endpoint === '') {
-            return (
-              <Button type="primary" icon="eye-o" size="small" disabled></Button>
-            )
-          }
           return (
-            <Button type="primary" icon="eye-o" size="small" onClick={e => this.handleVnc(record, e)}></Button>
+            <Button type="primary" icon="eye-o" size="small"
+              onClick={e => this.handleVnc(record, e)}
+              disabled={(record.status.state !== 'running' && record.status.state !== 'migrating') || record.spec.hosted_novnc === false || record.status.vnc_endpoint === ''}></Button>
           )
         },
       },
