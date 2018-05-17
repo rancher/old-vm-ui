@@ -50,6 +50,7 @@ const Routers = function ({ history, app }) {
             require.ensure([], (require) => {
               nprogress.done()
               registerModel(app, require('./models/instances'))
+              registerModel(app, require('./models/hosts'))
               registerModel(app, require('./models/credentials'))
               cb(null, require('./routes/instances/'))
             }, 'instances')

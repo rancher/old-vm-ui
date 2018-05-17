@@ -4,9 +4,10 @@ import GroupActions from './GroupActions'
 import CreateInstance from './CreateInstance'
 import InstanceLister from './InstanceLister'
 
-function Instances({ instances, credentials, loading, dispatch }) {
+function Instances({ instances, credentials, hosts, loading, dispatch }) {
   const { data, createInstanceModalVisible, selectedRowKeys, noRowSelected } = instances
   const credentialData = credentials.data
+  const hostData = hosts.data
 
   const groupActions = {
     create() {
@@ -23,12 +24,6 @@ function Instances({ instances, credentials, loading, dispatch }) {
     startSelected() {
       dispatch({
         type: 'instances/startSelected',
-        payload: selectedRowKeys,
-      })
-    },
-    migrateSelected() {
-      dispatch({
-        type: 'instances/migrateSelected',
         payload: selectedRowKeys,
       })
     },
@@ -82,6 +77,13 @@ function Instances({ instances, credentials, loading, dispatch }) {
       })
     },
     selectedRowKeys,
+    hostData,
+    updateInstance(record) {
+      dispatch({
+        type: 'instances/update',
+        payload: record,
+      })
+    },
   }
 
   return (
@@ -96,8 +98,9 @@ function Instances({ instances, credentials, loading, dispatch }) {
 Instances.propTypes = {
   instances: PropTypes.object,
   credentials: PropTypes.object,
+  hosts: PropTypes.object,
   loading: PropTypes.bool,
   dispatch: PropTypes.func,
 }
 
-export default connect(({ instances, credentials, loading }) => ({ instances, credentials, loading: loading.models.instance }))(Instances)
+export default connect(({ instances, credentials, hosts, loading }) => ({ instances, credentials, hosts, loading: loading.models.instance }))(Instances)

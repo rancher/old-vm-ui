@@ -14,11 +14,10 @@ class GroupActions extends React.Component {
   }
   confirmStopSelected = () => { this.confirmAction('stop', this.props.stopSelected) }
   confirmStartSelected = () => { this.confirmAction('start', this.props.startSelected) }
-  confirmMigrateSelected = () => { this.confirmAction('migrate', this.props.migrateSelected) }
   confirmDeleteSelected = () => { this.confirmAction('delete', this.props.deleteSelected) }
 
   render() {
-    const { confirmStopSelected, confirmStartSelected, confirmMigrateSelected, confirmDeleteSelected } = this
+    const { confirmStopSelected, confirmStartSelected, confirmDeleteSelected } = this
     const { create, noRowSelected } = this.props
     return (
       <div>
@@ -26,7 +25,6 @@ class GroupActions extends React.Component {
         <ButtonGroup style={{ marginBottom: 5, marginRight: 5 }}>
           <Button type="default" onClick={confirmStopSelected} disabled={noRowSelected}>Stop</Button>
           <Button type="default" onClick={confirmStartSelected} disabled={noRowSelected}>Start</Button>
-          <Button type="default" onClick={confirmMigrateSelected} disabled={noRowSelected}>Migrate</Button>
         </ButtonGroup>
         <Button type="danger" onClick={confirmDeleteSelected} style={{ marginBottom: 5 }} disabled={noRowSelected}>Delete</Button>
       </div>
@@ -38,7 +36,6 @@ GroupActions.propTypes = {
   create: PropTypes.func,
   stopSelected: PropTypes.func,
   startSelected: PropTypes.func,
-  migrateSelected: PropTypes.func,
   deleteSelected: PropTypes.func,
   noRowSelected: PropTypes.bool,
 }

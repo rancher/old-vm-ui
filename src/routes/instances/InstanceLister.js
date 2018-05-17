@@ -1,10 +1,14 @@
 import React, { PropTypes } from 'react'
-import { Button, Radio, Table } from 'antd'
+import { Button, Radio, Table, Menu, Dropdown, Icon } from 'antd'
 import styles from './InstanceLister.less'
 
 class InstanceLister extends React.Component {
   state = {}
 
+  onNodeSelected = (record, e) => {
+    record.spec.node_name = e.key === 'any' ? '' : e.key
+    this.props.updateInstance(record)
+  }
   sleep = (time) => {
     return new Promise((resolve) => setTimeout(resolve, time))
   }
@@ -13,7 +17,6 @@ class InstanceLister extends React.Component {
       this.forceUpdate()
     })
   }
-
   handleActionChange = (record, event) => {
     const { name } = record.metadata
     const { value } = event.target
@@ -25,6 +28,15 @@ class InstanceLister extends React.Component {
     window.open(url)
   }
   render() {
+    const hosts = []
+    const { hostData } = this.props
+    for (let i = 0; i < hostData.length; i++) {
+      const { name } = hostData[i].metadata
+      hosts.push(<Menu.Item key={name}>{name}</Menu.Item>)
+    }
+    hosts.push(<Menu.Divider />)
+    hosts.push(<Menu.Item key="any">any</Menu.Item>)
+
     const columns = [
       {
         title: 'Name',
@@ -74,11 +86,6 @@ class InstanceLister extends React.Component {
         key: 'launchTime',
         width: 150,
       }, {
-        title: 'Node Name',
-        dataIndex: 'status.node_name',
-        key: 'nodeName',
-        width: 120,
-      }, {
         title: 'State',
         dataIndex: 'status.state',
         key: 'state',
@@ -95,9 +102,36 @@ class InstanceLister extends React.Component {
           return obj
         },
       }, {
+        title: 'Node Name',
+        key: 'nodeName',
+        width: 180,
+        fixed: 'right',
+        render: (record) => {
+          const { onNodeSelected } = this
+          const menu = (
+            <Menu
+              onSelect={e => onNodeSelected(record, e)}
+              selectedKeys={[record.spec.node_name === '' ? 'any' : record.spec.node_name]}
+            >
+              {hosts}
+            </Menu>
+          )
+
+          return (
+            <div>
+              <Dropdown overlay={menu} trigger={['click']}>
+                <a className="ant-dropdown-link">
+                  {record.spec.node_name === '' ? 'any' : record.spec.node_name} <Icon type="down" />
+                </a>
+              </Dropdown>
+              ({record.status.node_name})
+            </div>
+          )
+        },
+      }, {
         title: 'Actions',
         key: 'action',
-        width: 190,
+        width: 120,
         fixed: 'right',
         render: (record) => {
           return (
@@ -105,7 +139,6 @@ class InstanceLister extends React.Component {
               <Radio.Group value={record.spec.action} size="small" onChange={e => this.handleActionChange(record, e)} disabled={record.status.state === 'migrating'}>
                 <Radio.Button value="stop">Stop</Radio.Button>
                 <Radio.Button value="start">Start</Radio.Button>
-                <Radio.Button value="migrate" disabled={record.status.state !== 'running'}>Migrate</Radio.Button>
               </Radio.Group>
             </div>
           )
@@ -162,6 +195,8 @@ InstanceLister.propTypes = {
   actionInstance: PropTypes.func,
   onSelectChange: PropTypes.func,
   selectedRowKeys: PropTypes.array,
+  hostData: PropTypes.array,
+  updateInstance: PropTypes.func,
 }
 
 export default InstanceLister

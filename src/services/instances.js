@@ -18,6 +18,24 @@ export async function createInstance(params) {
   })
 }
 
+export async function updateInstance(record) {
+  const { name } = record.metadata
+  const { cpus, memory_mb, action, public_keys, hosted_novnc, node_name } = record.spec
+  return request({
+    url: '/v1/instances',
+    method: 'put',
+    data: {
+      name,
+      cpus,
+      memory: memory_mb,
+      action,
+      pubkey: public_keys,
+      novnc: hosted_novnc,
+      node_name,
+    },
+  })
+}
+
 export async function actionInstance(payload) {
   const { record, action } = payload
   return request({
@@ -44,5 +62,4 @@ export function actionInstances(payload, action) {
 }
 export async function startInstances(payload) { return actionInstances(payload, 'start') }
 export async function stopInstances(payload) { return actionInstances(payload, 'stop') }
-export async function migrateInstances(payload) { return actionInstances(payload, 'migrate') }
 export async function deleteInstances(payload) { return actionInstances(payload, 'delete') }
