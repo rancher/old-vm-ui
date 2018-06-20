@@ -19,7 +19,7 @@ class CreateInstance extends React.Component {
     cpus: 1,
     memory: 512,
     instanceCount: 1,
-    image: 'ubuntu:16.04.4-server-amd64',
+    image: 'rancher/vm-ubuntu:16.04.4-server-amd64',
     start: true,
     novnc: false,
     publicKeys: [],
@@ -95,15 +95,15 @@ class CreateInstance extends React.Component {
     const menu = (
       <Menu onSelect={this.onImageSelected} style={{ width: '100px' }}>
         <SubMenu title="Ubuntu">
-          <Menu.Item key="ubuntu:16.04.4-desktop-amd64">16.04 LTS Desktop</Menu.Item>
-          <Menu.Item key="ubuntu:16.04.4-server-amd64">16.04 LTS Server</Menu.Item>
+          <Menu.Item key="rancher/vm-ubuntu:16.04.4-desktop-amd64">16.04 LTS Desktop</Menu.Item>
+          <Menu.Item key="rancher/vm-ubuntu:16.04.4-server-amd64">16.04 LTS Server</Menu.Item>
         </SubMenu>
         <SubMenu title="CentOS">
-          <Menu.Item key="centos:7-x86_64-minimal-1708">7 Minimal (Build 1708)</Menu.Item>
+          <Menu.Item key="rancher/vm-centos:7-x86_64-minimal-1708">7 Minimal (Build 1708)</Menu.Item>
         </SubMenu>
         <SubMenu title="Fedora">
-          <Menu.Item key="fedora:Atomic-27-20180326.1.x86_64">27 Atomic</Menu.Item>
-          <Menu.Item key="fedora:27-1.6.x86_64">27 Server</Menu.Item>
+          <Menu.Item key="rancher/vm-fedora:Atomic-27-20180326.1.x86_64">27 Atomic</Menu.Item>
+          <Menu.Item key="rancher/vm-fedora:27-1.6.x86_64">27 Server</Menu.Item>
         </SubMenu>
       </Menu>
     )
