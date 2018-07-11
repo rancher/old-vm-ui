@@ -4,7 +4,8 @@ VERSION = $(shell ./scripts/version)
 REPO = vm-frontend
 NAME = vm-frontend
 INSTANCE = default
-LONHORN_MANAGER_IP = http://localhost:9500
+BACKEND_SERVICE_HOST = localhost
+BACKEND_SERVICE_PORT = 9500
 PORT = 8000
 
 .PHONY: build push shell run start stop rm release
@@ -17,6 +18,6 @@ stop:
 	docker stop $(NAME)-$(INSTANCE)
 
 run:
-	docker run -d --name $(NAME)-$(INSTANCE) -p $(PORT):8000 -e LONGHORN_MANAGER_IP=$(LONGHORN_MANAGER_IP) $(NS)/$(REPO):$(VERSION)
+	docker run -d --name $(NAME)-$(INSTANCE) -p $(PORT):8000 -e BACKEND_SERVICE_HOST=$(BACKEND_SERVICE_HOST) -e BACKEND_SERVICE_PORT=$(BACKEND_SERVICE_PORT) $(NS)/$(REPO):$(VERSION)
 
 default: build
