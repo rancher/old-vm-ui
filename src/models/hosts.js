@@ -1,4 +1,5 @@
 import { query } from '../services/hosts'
+import { wsChanges } from '../utils/websocket'
 import { parse } from 'qs'
 
 export default {
@@ -14,6 +15,7 @@ export default {
           payload: location.query,
         })
       })
+      wsChanges(dispatch, 'host', '5s')
     },
   },
   effects: {
@@ -21,18 +23,17 @@ export default {
       payload,
     }, { call, put }) {
       const data = yield call(query, parse(payload))
-      data.data.sort((a, b) => a.metadata.name.localeCompare(b.metadata.name))
-      yield put({ type: 'queryInstance', payload: { ...data } })
+      yield put({ type: 'queryHost', payload: { ...data } })
     },
-    // *delete({
-    //   payload,
-    // }, { call, put }) {
-    //   yield call(deleteInstance, payload)
-    //   yield put({ type: 'query' })
-    // },
+    *updateBackground({
+      payload,
+    }, { put }) {
+      const data = payload
+      yield put({ type: 'queryHost', payload: { ...data } })
+    },
   },
   reducers: {
-    queryInstance(state, action) {
+    queryHost(state, action) {
       return {
         ...state,
         ...action.payload,

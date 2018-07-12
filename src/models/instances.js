@@ -1,4 +1,5 @@
 import { query, deleteInstance, actionInstance, createInstance, updateInstance, startInstances, stopInstances, deleteInstances } from '../services/instances'
+import { wsChanges } from '../utils/websocket'
 import { parse } from 'qs'
 
 export default {
@@ -17,6 +18,7 @@ export default {
           payload: location.query,
         })
       })
+      wsChanges(dispatch, 'instances', '1s')
     },
   },
   effects: {
@@ -24,7 +26,12 @@ export default {
       payload,
     }, { call, put }) {
       const data = yield call(query, parse(payload))
-      data.data.sort((a, b) => a.metadata.name.localeCompare(b.metadata.name))
+      yield put({ type: 'queryInstance', payload: { ...data } })
+    },
+    *updateBackground({
+      payload,
+    }, { put }) {
+      const data = payload
       yield put({ type: 'queryInstance', payload: { ...data } })
     },
     *create({
