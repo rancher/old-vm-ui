@@ -1,5 +1,5 @@
 module.exports = {
-  name: 'Longhorn UI',
+  name: 'RancherVM UI',
   prefix: 'antdAdmin',
-  logoSrc: 'http://releases.cnrancher.com:9090/latest/assets/images/logos/favicon.ico',
+  logoSrc: 'https://rancher.com/img/favicon.png',
 }
