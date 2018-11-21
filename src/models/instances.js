@@ -11,13 +11,7 @@ export default {
     noRowSelected: true,
   },
   subscriptions: {
-    setup({ dispatch, history }) {
-      history.listen(location => {
-        dispatch({
-          type: 'query',
-          payload: location.query,
-        })
-      })
+    setup({ dispatch }) {
       wsChanges(dispatch, 'instances', '1s')
     },
   },

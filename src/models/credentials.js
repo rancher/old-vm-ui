@@ -8,13 +8,7 @@ export default {
     data: [],
   },
   subscriptions: {
-    setup({ dispatch, history }) {
-      history.listen(location => {
-        dispatch({
-          type: 'query',
-          payload: location.query,
-        })
-      })
+    setup({ dispatch }) {
       wsChanges(dispatch, 'credential', '1s')
     },
   },

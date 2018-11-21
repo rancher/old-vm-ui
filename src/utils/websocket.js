@@ -20,9 +20,11 @@ export function wsChanges(dispatch, type, period) {
   let url = constructWebsocketURL(type, period)
   const ws = new WebSocket(url)
   ws.onmessage = function (msg) {
-    dispatch({
-      type: 'updateBackground',
-      payload: JSON.parse(msg.data),
-    })
+    if (JSON.parse(msg.data).data != null) {
+      dispatch({
+        type: 'updateBackground',
+        payload: JSON.parse(msg.data),
+      })
+    }
   }
 }
