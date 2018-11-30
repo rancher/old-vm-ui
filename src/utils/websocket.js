@@ -1,3 +1,5 @@
+import { getPrefix } from './pathnamePrefix'
+
 function constructWebsocketURL(type, period) {
   let loc = window.location
 
@@ -6,14 +8,12 @@ function constructWebsocketURL(type, period) {
     proto = 'wss:'
   }
 
-  // FIXME this should be derived from LONGHORN_MANAGER_IP
-  let host = '127.0.0.1:9500'
-  // the local dev server doesn't forward websockets correctly so we bypass it
-  if (loc.host !== 'localhost:8000') {
-    host = loc.host
+  let prefix = getPrefix()
+  if (prefix === '') {
+    prefix = '/'
   }
 
-  return `${proto}//${host}/v1/ws/${period}/${type}`
+  return `${proto}//${loc.host}${prefix}v1/ws/${period}/${type}`
 }
 
 export function wsChanges(dispatch, type, period) {
