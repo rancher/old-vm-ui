@@ -24,6 +24,7 @@ const Routers = function ({ history, app }) {
           registerModel(app, require('./models/instances'))
           registerModel(app, require('./models/hosts'))
           registerModel(app, require('./models/credentials'))
+          registerModel(app, require('./models/machineimages'))
           cb(null, { component: require('./routes/dashboard/') })
         }, 'dashboard')
       },
@@ -38,6 +39,7 @@ const Routers = function ({ history, app }) {
               registerModel(app, require('./models/instances'))
               registerModel(app, require('./models/hosts'))
               registerModel(app, require('./models/credentials'))
+              registerModel(app, require('./models/machineimages'))
               cb(null, require('./routes/dashboard/'))
             }, 'dashboard')
           },
@@ -52,6 +54,7 @@ const Routers = function ({ history, app }) {
               registerModel(app, require('./models/instances'))
               registerModel(app, require('./models/hosts'))
               registerModel(app, require('./models/credentials'))
+              registerModel(app, require('./models/machineimages'))
               cb(null, require('./routes/instances/'))
             }, 'instances')
           },
@@ -81,57 +84,16 @@ const Routers = function ({ history, app }) {
           },
         },
         {
-          path: 'host',
-          name: 'host',
+          path: 'machineimages',
+          name: 'machineimages',
           getComponent(nextState, cb) {
             nprogress.start()
             require.ensure([], (require) => {
               nprogress.done()
-              registerModel(app, require('./models/host'))
-              registerModel(app, require('./models/volume'))
-              cb(null, require('./routes/host/'))
-            }, 'host')
-          },
-        },
-        {
-          path: 'volume',
-          name: 'volume',
-          getComponent(nextState, cb) {
-            nprogress.start()
-            require.ensure([], (require) => {
-              nprogress.done()
-              registerModel(app, require('./models/host'))
-              registerModel(app, require('./models/volume'))
-              cb(null, require('./routes/volume/'))
-            }, 'volume')
-          },
-        },
-        {
-          path: 'volume/:id',
-          name: 'volume/detail',
-          getComponent(nextState, cb) {
-            nprogress.start()
-            require.ensure([], (require) => {
-              nprogress.done()
-              registerModel(app, require('./models/snapshot')('snapshotModal'))
-              registerModel(app, require('./models/backup'))
-              registerModel(app, require('./models/host'))
-              registerModel(app, require('./models/volume'))
-              cb(null, require('./routes/volume/detail'))
-            }, 'volume-detail')
-          },
-        },
-        {
-          path: 'backup',
-          name: 'backup',
-          getComponent(nextState, cb) {
-            nprogress.start()
-            require.ensure([], (require) => {
-              nprogress.done()
-              registerModel(app, require('./models/host'))
-              registerModel(app, require('./models/backup'))
-              cb(null, require('./routes/backup/'))
-            }, 'backup')
+              registerModel(app, require('./models/machineimages'))
+              registerModel(app, require('./models/instances'))
+              cb(null, require('./routes/machineimages/'))
+            }, 'credentials')
           },
         },
         {

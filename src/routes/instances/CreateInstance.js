@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react'
-import { Modal, Slider, InputNumber, Row, Col, Checkbox, Input, Menu, Dropdown, Select, Tooltip } from 'antd'
-const SubMenu = Menu.SubMenu
+import { Modal, Slider, InputNumber, Row, Col, Checkbox, Input, Select, Tooltip } from 'antd'
 const Option = Select.Option
 
 const memoryMarks = {
@@ -19,11 +18,12 @@ class CreateInstance extends React.Component {
     cpus: 1,
     memory: 512,
     instanceCount: 1,
-    image: 'rancher/vm-ubuntu:16.04.4-server-amd64',
+    image: '',
     start: true,
     novnc: false,
     publicKeys: [],
     nodeName: '',
+    persistentStorage: true,
   }
   onNameChange = (e) => {
     const { value } = e.target
@@ -46,20 +46,9 @@ class CreateInstance extends React.Component {
       instanceCount: value,
     })
   }
-  onImageSelected = (e) => {
-    const { key } = e
+  onMachineImageChange = (value) => {
     this.setState({
-      image: key,
-    })
-  }
-  onActionChange = (e) => {
-    this.setState({
-      start: e.target.checked,
-    })
-  }
-  onNovncChange = (e) => {
-    this.setState({
-      novnc: e.target.checked,
+      image: value,
     })
   }
   onPublicKeyChange = (values) => {
@@ -72,10 +61,39 @@ class CreateInstance extends React.Component {
       nodeName: value,
     })
   }
+  onActionChange = (e) => {
+    this.setState({
+      start: e.target.checked,
+    })
+  }
+  onNovncChange = (e) => {
+    this.setState({
+      novnc: e.target.checked,
+    })
+  }
+  onPersistentStorageChange = (e) => {
+    this.setState({
+      persistentStorage: e.target.checked,
+    })
+  }
   handleOk = () => {
     const { onOk } = this.props
-    const { name, cpus, memory, image, publicKeys, novnc, instanceCount, start, nodeName } = this.state
+    const { name, cpus, memory, image, publicKeys, novnc, instanceCount, start, nodeName, persistentStorage } = this.state
     const action = start === true ? 'start' : 'stop'
+    let volume
+    if (persistentStorage) {
+      volume = {
+        longhorn: {
+          frontend: 'blockdev',
+          number_of_replicas: 3,
+          stale_replica_timeout: 20,
+        },
+      }
+    } else {
+      volume = {
+        empty_dir: {},
+      }
+    }
     onOk({
       name,
       cpus,
@@ -86,41 +104,28 @@ class CreateInstance extends React.Component {
       novnc,
       instances: instanceCount,
       node_name: nodeName,
+      volume,
     })
   }
+
   render() {
-    const { confirmLoading, cpus, memory, instanceCount, image } = this.state
-    // TODO: Image data should come from backend. Consider supporting volumes
-    // from base images and VM images in the near future
-    const menu = (
-      <Menu onSelect={this.onImageSelected} style={{ width: '100px' }}>
-        <SubMenu title="Ubuntu">
-          <Menu.Item key="rancher/vm-ubuntu:16.04.4-desktop-amd64">16.04 LTS Desktop</Menu.Item>
-          <Menu.Item key="rancher/vm-ubuntu:16.04.4-server-amd64">16.04 LTS Server</Menu.Item>
-        </SubMenu>
-        <SubMenu title="CentOS">
-          <Menu.Item key="rancher/vm-centos:7-x86_64-minimal-1708">7 Minimal (Build 1708)</Menu.Item>
-        </SubMenu>
-        <SubMenu title="Fedora">
-          <Menu.Item key="rancher/vm-fedora:Atomic-27-20180326.1.x86_64">27 Atomic</Menu.Item>
-          <Menu.Item key="rancher/vm-fedora:27-1.6.x86_64">27 Server</Menu.Item>
-        </SubMenu>
-      </Menu>
-    )
+    const { confirmLoading, cpus, memory, instanceCount } = this.state
+    const { credentialData, hostData, machineImageData, visible, onCancel } = this.props
 
     const credentials = []
-    const { credentialData, visible, onCancel } = this.props
-    for (let i = 0; i < credentialData.length; i++) {
-      const { name } = credentialData[i].metadata
-      credentials.push(<Option key={name}>{name}</Option>)
-    }
+    credentialData.map((entry) => {
+      return credentials.push(<Option key={entry.metadata.name}>{entry.metadata.name}</Option>)
+    })
 
     const hosts = []
-    const { hostData } = this.props
-    for (let i = 0; i < hostData.length; i++) {
-      const { name } = hostData[i].metadata
-      hosts.push(<Option key={name}>{name}</Option>)
-    }
+    hostData.map((entry) => {
+      return hosts.push(<Option key={entry.metadata.name}>{entry.metadata.name}</Option>)
+    })
+
+    const machineImages = []
+    machineImageData.map((entry) => {
+      return machineImages.push(<Option key={entry.metadata.name}>{entry.metadata.name}</Option>)
+    })
 
     return (
       <div>
@@ -192,12 +197,18 @@ class CreateInstance extends React.Component {
           </Row>
           <Row>
             <Col span={4} style={{ marginLeft: 24, marginTop: 5 }}>
-              <p>Base Image</p>
+              <p>Image</p>
             </Col>
-            <Col span={17}>
-              <Dropdown.Button overlay={menu}>
-                {image}
-              </Dropdown.Button>
+            <Col span={16}>
+              <Select
+                mode="combobox"
+                style={{ width: '100%', marginTop: 5 }}
+                allowClear
+                placeholder="Please select"
+                onChange={this.onMachineImageChange}
+              >
+                {machineImages}
+              </Select>
             </Col>
           </Row>
           <Row>
@@ -237,6 +248,11 @@ class CreateInstance extends React.Component {
             <Checkbox defaultChecked onChange={this.onActionChange} style={{ marginTop: 16 }}>Start Instance Immediately</Checkbox>
           </Row>
           <Row>
+            <Tooltip title="Required for creating images from machine">
+              <Checkbox defaultChecked onChange={this.onPersistentStorageChange} style={{ marginTop: 16 }}>Persistent Storage</Checkbox>
+            </Tooltip>
+          </Row>
+          <Row>
             <Tooltip title="Recommended for Desktop Images only">
               <Checkbox onChange={this.onNovncChange} style={{ marginTop: 16 }}>Enable NoVNC</Checkbox>
             </Tooltip>
@@ -250,6 +266,7 @@ class CreateInstance extends React.Component {
 CreateInstance.propTypes = {
   credentialData: PropTypes.array,
   hostData: PropTypes.array,
+  machineImageData: PropTypes.array,
   visible: PropTypes.bool,
   onOk: PropTypes.func,
   onCancel: PropTypes.func,

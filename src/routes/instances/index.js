@@ -4,10 +4,11 @@ import GroupActions from './GroupActions'
 import CreateInstance from './CreateInstance'
 import InstanceLister from './InstanceLister'
 
-function Instances({ instances, credentials, hosts, loading, dispatch }) {
+function Instances({ instances, credentials, hosts, machineimages, loading, dispatch }) {
   const { data, createInstanceModalVisible, selectedRowKeys, noRowSelected } = instances
   const credentialData = credentials.data
   const hostData = hosts.data
+  const machineImageData = machineimages.data
 
   const groupActions = {
     create() {
@@ -39,6 +40,7 @@ function Instances({ instances, credentials, hosts, loading, dispatch }) {
   const createInstanceModalProps = {
     credentialData,
     hostData,
+    machineImageData,
     visible: createInstanceModalVisible,
     onOk(payload) {
       dispatch({
@@ -100,8 +102,9 @@ Instances.propTypes = {
   instances: PropTypes.object,
   credentials: PropTypes.object,
   hosts: PropTypes.object,
+  machineimages: PropTypes.object,
   loading: PropTypes.bool,
   dispatch: PropTypes.func,
 }
 
-export default connect(({ instances, credentials, hosts, loading }) => ({ instances, credentials, hosts, loading: loading.models.instance }))(Instances)
+export default connect(({ instances, credentials, hosts, machineimages, loading }) => ({ instances, credentials, hosts, machineimages, loading: loading.models.instance }))(Instances)

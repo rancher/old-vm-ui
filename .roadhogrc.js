@@ -1,4 +1,4 @@
-const endpoint = process.env.LONGHORN_MANAGER_IP || 'http://54.223.25.181:9500/';
+const endpoint = process.env.LONGHORN_MANAGER_IP || 'http://192.168.100.132:30114/';
 export default {
   "entry": "src/index.js",
   "disableCSSModules": false,
@@ -22,6 +22,12 @@ export default {
     }
   },
   "proxy": {
+    "/v1/ws/**": {
+      "target": endpoint,
+      "changeOrigin": false,
+      "ws": true,
+      "secure": false
+    },
     "/v1/": {
       "target": endpoint,
       "changeOrigin": false

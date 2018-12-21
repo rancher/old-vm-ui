@@ -5,44 +5,28 @@ module.exports = [
     icon: 'bar-chart',
   },
   {
-    key: 'instances',
-    name: 'Instances',
+    key: 'hosts',
+    name: 'Node',
     icon: 'laptop',
   },
   {
-    key: 'hosts',
-    name: 'Hosts',
+    key: 'instances',
+    name: 'Instance',
     icon: 'database',
   },
   {
     key: 'credentials',
-    name: 'Credentials',
+    name: 'Key',
     icon: 'key',
   },
-  // {
-  //   key: 'host',
-  //   name: 'Host',
-  //   icon: 'laptop',
-  // },
-  // {
-  //   key: 'volume',
-  //   name: 'Volume',
-  //   icon: 'database',
-  //   child: [
-  //     {
-  //       key: 'detail',
-  //       name: 'Detail',
-  //     },
-  //   ],
-  // },
-  // {
-  //   key: 'backup',
-  //   name: 'Backup',
-  //   icon: 'copy',
-  // },
-  // {
-  //   key: 'setting',
-  //   name: 'Setting',
-  //   icon: 'setting',
-  // },
+  {
+    key: 'machineimages',
+    name: 'Image',
+    icon: 'appstore',
+  },
+  {
+    key: 'setting',
+    name: 'Setting',
+    icon: 'setting',
+  },
 ]

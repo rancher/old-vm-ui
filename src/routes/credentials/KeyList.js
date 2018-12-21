@@ -7,12 +7,16 @@ const columns = [
     title: 'Name',
     dataIndex: 'metadata.name',
     key: 'name',
-    width: 150,
+    width: 200,
     fixed: 'left',
   }, {
     title: 'Public Key',
     dataIndex: 'spec.public_key',
     key: 'pubkey',
+    render: (pubkey) => {
+      let parts = pubkey.split(' ')
+      return `${parts[0]} ${parts[1].substring(0, 16)}...${parts[1].substring(parts[1].length - 16)}`
+    },
   }, {
     title: 'Create Time',
     dataIndex: 'metadata.creationTimestamp',

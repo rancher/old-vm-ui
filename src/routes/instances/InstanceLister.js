@@ -42,7 +42,7 @@ class InstanceLister extends React.Component {
         title: 'Name',
         dataIndex: 'metadata.name',
         key: 'name',
-        width: 150,
+        width: 200,
         align: 'left',
         fixed: 'left',
       }, {
@@ -51,7 +51,17 @@ class InstanceLister extends React.Component {
         key: 'ip',
         width: 120,
       }, {
-        title: 'Credentials',
+        title: 'vCPU',
+        dataIndex: 'spec.cpus',
+        key: 'cpus',
+        width: 50,
+      }, {
+        title: 'Memory',
+        dataIndex: 'spec.memory_mb',
+        key: 'memory',
+        width: 80,
+      }, {
+        title: 'Keys',
         dataIndex: 'spec.public_keys',
         key: 'publicKeys',
         width: 100,
@@ -66,25 +76,9 @@ class InstanceLister extends React.Component {
           return out
         },
       }, {
-        title: 'vCPU',
-        dataIndex: 'spec.cpus',
-        key: 'cpus',
-        width: 50,
-      }, {
-        title: 'Memory',
-        dataIndex: 'spec.memory_mb',
-        key: 'memory',
-        width: 80,
-      }, {
-        title: 'Base Image',
+        title: 'Machine Image',
         dataIndex: 'spec.image',
         key: 'image',
-        // width: 200,
-      }, {
-        title: 'Launch Time',
-        dataIndex: 'metadata.creationTimestamp',
-        key: 'launchTime',
-        width: 150,
       }, {
         title: 'State',
         dataIndex: 'status.state',
@@ -177,7 +171,6 @@ class InstanceLister extends React.Component {
           rowSelection={rowSelection}
           size="small"
           pagination={{ pageSize: 10 }}
-          scroll={{ x: 1200, y: 500 }}
           rowKey={record => record.metadata.name}
         />
       </div>

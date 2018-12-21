@@ -17,10 +17,10 @@ const form = ({
     const fields = getFieldsValue()
     onSubmit(fields)
   }
-  const settings = data.map((item) => <FormItem key={item.id}>
-    {getFieldDecorator(item.name, {
-      initialValue: item.value,
-    })(<Input addonBefore={item.name.humpToSpace()} />)}
+  const settings = data.map((item) => <FormItem key={item.metadata.uid}>
+    {getFieldDecorator(item.metadata.name, {
+      initialValue: item.spec.value,
+    })(<Input addonBefore={item.metadata.name.humpToSpace()} />)}
   </FormItem>)
 
   return (

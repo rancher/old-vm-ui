@@ -3,33 +3,41 @@ import { connect } from 'dva'
 import { Row, Col } from 'antd'
 import { NumberCard } from './components'
 
-function Dashboard({ instances, hosts, credentials, loading }) {
+function Dashboard({ instances, hosts, credentials, machineimages, loading }) {
   const instanceNum = instances.data.length
   const hostNum = hosts.data.length
   const credentialNum = credentials.data.length
-  const { instances: instanceLoading, hosts: hostLoading, credentials: credentialLoading } = loading.models
+  const imageNum = machineimages.data.length
+  const { instances: instanceLoading, hosts: hostLoading, credentials: credentialLoading, machineimages: machineimageLoading } = loading.models
 
   const numbers = [{
     icon: 'laptop',
+    color: '#d897eb',
+    title: 'Nodes',
+    number: hostNum,
+    linkTo: '/hosts',
+    loading: hostLoading,
+  }, {
+    icon: 'database',
     color: '#64ea91',
     title: 'Instances',
     number: instanceNum,
     linkTo: '/instances',
     loading: instanceLoading,
   }, {
-    icon: 'database',
-    color: '#d897eb',
-    title: 'Hosts',
-    number: hostNum,
-    linkTo: '/hosts',
-    loading: hostLoading,
-  }, {
     icon: 'key',
     color: '#d897eb',
-    title: 'Credentials',
+    title: 'Keys',
     number: credentialNum,
     linkTo: '/credentials',
     loading: credentialLoading,
+  }, {
+    icon: 'appstore',
+    color: '#d897eb',
+    title: 'Images',
+    number: imageNum,
+    linkTo: '/machineimages',
+    loading: machineimageLoading,
   },
   ]
 
@@ -50,7 +58,8 @@ Dashboard.propTypes = {
   instances: PropTypes.object,
   hosts: PropTypes.object,
   credentials: PropTypes.object,
+  machineimages: PropTypes.object,
   loading: PropTypes.object,
 }
 
-export default connect(({ instances, hosts, credentials, loading }) => ({ instances, hosts, credentials, loading }))(Dashboard)
+export default connect(({ instances, hosts, credentials, machineimages, loading }) => ({ instances, hosts, credentials, machineimages, loading }))(Dashboard)

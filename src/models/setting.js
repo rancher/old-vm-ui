@@ -1,4 +1,5 @@
 import { query, update } from '../services/setting'
+import { wsChanges } from '../utils/websocket'
 import { parse } from 'qs'
 
 export default {
@@ -8,13 +9,8 @@ export default {
     saving: false,
   },
   subscriptions: {
-    setup({ dispatch, history }) {
-      history.listen(location => {
-        dispatch({
-          type: 'query',
-          payload: location.query,
-        })
-      })
+    setup({ dispatch }) {
+      wsChanges(dispatch, 'setting', '1s')
     },
   },
   effects: {
@@ -24,13 +20,20 @@ export default {
       const data = yield call(query, parse(payload))
       yield put({ type: 'querySetting', payload: { ...data } })
     },
+    *updateBackground({
+      payload,
+    }, { put }) {
+      const data = payload
+      yield put({ type: 'querySetting', payload: { ...data } })
+    },
     *update({ payload }, { call, put, select }) {
       yield put({ type: 'showSaving' })
       for (const key of Object.keys(payload)) {
         const data = yield select(({ setting }) => setting.data)
-        const found = data.find(setting => setting.name === key)
-        if (found && found.value !== payload[key]) {
-          yield call(update, { ...found, value: payload[key] })
+        const found = data.find(setting => setting.metadata.name === key)
+        if (found && found.spec.value !== payload[key]) {
+          const { name } = found.metadata
+          yield call(update, { name, value: payload[key] })
         }
       }
       yield put({ type: 'query' })
