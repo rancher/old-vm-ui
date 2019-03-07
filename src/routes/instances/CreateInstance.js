@@ -20,10 +20,10 @@ class CreateInstance extends React.Component {
     instanceCount: 1,
     image: '',
     start: true,
-    novnc: false,
+    novnc: true,
     publicKeys: [],
     nodeName: '',
-    persistentStorage: true,
+    persistentStorage: false,
   }
   onNameChange = (e) => {
     const { value } = e.target
@@ -69,11 +69,6 @@ class CreateInstance extends React.Component {
   onNovncChange = (e) => {
     this.setState({
       novnc: e.target.checked,
-    })
-  }
-  onPersistentStorageChange = (e) => {
-    this.setState({
-      persistentStorage: e.target.checked,
     })
   }
   handleOk = () => {
@@ -246,11 +241,6 @@ class CreateInstance extends React.Component {
           </Row>
           <Row>
             <Checkbox defaultChecked onChange={this.onActionChange} style={{ marginTop: 16 }}>Start Instance Immediately</Checkbox>
-          </Row>
-          <Row>
-            <Tooltip title="Required for creating images from machine">
-              <Checkbox defaultChecked onChange={this.onPersistentStorageChange} style={{ marginTop: 16 }}>Persistent Storage</Checkbox>
-            </Tooltip>
           </Row>
           <Row>
             <Checkbox defaultChecked onChange={this.onNovncChange} style={{ marginTop: 16 }}>Enable NoVNC</Checkbox>
