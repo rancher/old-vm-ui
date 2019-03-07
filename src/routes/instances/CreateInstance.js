@@ -253,9 +253,7 @@ class CreateInstance extends React.Component {
             </Tooltip>
           </Row>
           <Row>
-            <Tooltip title="Recommended for Desktop Images only">
-              <Checkbox onChange={this.onNovncChange} style={{ marginTop: 16 }}>Enable NoVNC</Checkbox>
-            </Tooltip>
+            <Checkbox defaultChecked onChange={this.onNovncChange} style={{ marginTop: 16 }}>Enable NoVNC</Checkbox>
           </Row>
         </Modal>
       </div>
