@@ -1,34 +1,7 @@
-# Longhorn UI
+# Rancher VM UI
 --------
 
-Admin UI for Longhorn Manger
-
-## Usage
-
-Prerequisites:
-* [Git](http://git-scm.com/)
-* [Node.js](http://nodejs.org/) (with NPM)
-
-Setup:
-```bash
-  git clone 'https://github.com/rancher/longhorn-ui'
-  cd 'longhorn-ui'
-  npm install
-```
-Run development server pointed at some Longhron Manger API
-```bash
-  LONGHORN_MANAGER_IP="http://longhorn:9500/" npm run dev
-```
-Compiling for distribution
-```bash
-  npm run build
-```
-
-Build and run a docker image
-```bash
-  make
-  make LONGHORN_MANAGER_IP=http://longhorn:9500 run
-```
+Admin UI for Rancher VM
 
 License
 =======
